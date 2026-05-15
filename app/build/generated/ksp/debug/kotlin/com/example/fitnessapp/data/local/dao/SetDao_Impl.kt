@@ -8,6 +8,7 @@ import androidx.room.util.getColumnIndexOrThrow
 import androidx.room.util.performSuspending
 import androidx.sqlite.SQLiteStatement
 import com.example.fitnessapp.`data`.local.entity.SetEntity
+import com.example.fitnessapp.`data`.local.entity.SetWithDate
 import javax.`annotation`.processing.Generated
 import kotlin.Boolean
 import kotlin.Double
@@ -141,6 +142,69 @@ public class SetDao_Impl(
           _tmpCompleted = _tmp != 0
           _item =
               SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getAllSetsForExerciseWithDate(exerciseId: Long): Flow<List<SetWithDate>> {
+    val _sql: String = """
+        |
+        |        SELECT s.*, w.startedAt 
+        |        FROM sets s 
+        |        JOIN workout_exercises we ON s.workoutExerciseId = we.id 
+        |        JOIN workouts w ON we.workoutId = w.id
+        |        WHERE we.exerciseId = ? 
+        |        ORDER BY w.startedAt ASC
+        |    
+        """.trimMargin()
+    return createFlow(__db, false, arrayOf("sets", "workout_exercises", "workouts")) {
+        _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, exerciseId)
+        val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
+        val _cursorIndexOfWorkoutExerciseId: Int = getColumnIndexOrThrow(_stmt, "workoutExerciseId")
+        val _cursorIndexOfSetNumber: Int = getColumnIndexOrThrow(_stmt, "setNumber")
+        val _cursorIndexOfReps: Int = getColumnIndexOrThrow(_stmt, "reps")
+        val _cursorIndexOfWeight: Int = getColumnIndexOrThrow(_stmt, "weight")
+        val _cursorIndexOfRpe: Int = getColumnIndexOrThrow(_stmt, "rpe")
+        val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
+        val _cursorIndexOfStartedAt: Int = getColumnIndexOrThrow(_stmt, "startedAt")
+        val _result: MutableList<SetWithDate> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: SetWithDate
+          val _tmpStartedAt: Long
+          _tmpStartedAt = _stmt.getLong(_cursorIndexOfStartedAt)
+          val _tmpSetEntity: SetEntity
+          val _tmpId: Long
+          _tmpId = _stmt.getLong(_cursorIndexOfId)
+          val _tmpWorkoutExerciseId: Long
+          _tmpWorkoutExerciseId = _stmt.getLong(_cursorIndexOfWorkoutExerciseId)
+          val _tmpSetNumber: Int
+          _tmpSetNumber = _stmt.getLong(_cursorIndexOfSetNumber).toInt()
+          val _tmpReps: Int
+          _tmpReps = _stmt.getLong(_cursorIndexOfReps).toInt()
+          val _tmpWeight: Double
+          _tmpWeight = _stmt.getDouble(_cursorIndexOfWeight)
+          val _tmpRpe: Int?
+          if (_stmt.isNull(_cursorIndexOfRpe)) {
+            _tmpRpe = null
+          } else {
+            _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
+          }
+          val _tmpCompleted: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_cursorIndexOfCompleted).toInt()
+          _tmpCompleted = _tmp != 0
+          _tmpSetEntity =
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+          _item = SetWithDate(_tmpSetEntity,_tmpStartedAt)
           _result.add(_item)
         }
         _result

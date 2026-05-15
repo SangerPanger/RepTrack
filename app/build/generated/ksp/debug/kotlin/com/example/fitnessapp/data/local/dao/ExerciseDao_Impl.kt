@@ -115,8 +115,8 @@ public class ExerciseDao_Impl(
     }
   }
 
-  public override suspend fun getExerciseByName(name: String): ExerciseEntity? {
-    val _sql: String = "SELECT * FROM exercises WHERE name LIKE ? LIMIT 1"
+  public override suspend fun getExerciseByNameIgnoreCase(name: String): ExerciseEntity? {
+    val _sql: String = "SELECT * FROM exercises WHERE LOWER(name) = LOWER(?) LIMIT 1"
     return performSuspending(__db, true, false) { _connection ->
       val _stmt: SQLiteStatement = _connection.prepare(_sql)
       try {

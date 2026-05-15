@@ -188,6 +188,49 @@ public class WorkoutDao_Impl(
     }
   }
 
+  public override fun getWorkoutFlow(id: Long): Flow<WorkoutEntity?> {
+    val _sql: String = "SELECT * FROM workouts WHERE id = ?"
+    return createFlow(__db, false, arrayOf("workouts")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, id)
+        val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
+        val _cursorIndexOfTitle: Int = getColumnIndexOrThrow(_stmt, "title")
+        val _cursorIndexOfStartedAt: Int = getColumnIndexOrThrow(_stmt, "startedAt")
+        val _cursorIndexOfFinishedAt: Int = getColumnIndexOrThrow(_stmt, "finishedAt")
+        val _cursorIndexOfNotes: Int = getColumnIndexOrThrow(_stmt, "notes")
+        val _result: WorkoutEntity?
+        if (_stmt.step()) {
+          val _tmpId: Long
+          _tmpId = _stmt.getLong(_cursorIndexOfId)
+          val _tmpTitle: String
+          _tmpTitle = _stmt.getText(_cursorIndexOfTitle)
+          val _tmpStartedAt: Long
+          _tmpStartedAt = _stmt.getLong(_cursorIndexOfStartedAt)
+          val _tmpFinishedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfFinishedAt)) {
+            _tmpFinishedAt = null
+          } else {
+            _tmpFinishedAt = _stmt.getLong(_cursorIndexOfFinishedAt)
+          }
+          val _tmpNotes: String?
+          if (_stmt.isNull(_cursorIndexOfNotes)) {
+            _tmpNotes = null
+          } else {
+            _tmpNotes = _stmt.getText(_cursorIndexOfNotes)
+          }
+          _result = WorkoutEntity(_tmpId,_tmpTitle,_tmpStartedAt,_tmpFinishedAt,_tmpNotes)
+        } else {
+          _result = null
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public override fun getLatestWorkout(): Flow<WorkoutEntity?> {
     val _sql: String = "SELECT * FROM workouts ORDER BY startedAt DESC LIMIT 1"
     return createFlow(__db, false, arrayOf("workouts")) { _connection ->
@@ -241,6 +284,68 @@ public class WorkoutDao_Impl(
           _result = _tmp
         } else {
           _result = 0
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getUniqueWorkoutTitles(): Flow<List<String>> {
+    val _sql: String =
+        "SELECT DISTINCT title FROM workouts WHERE title IS NOT NULL AND title != '' ORDER BY title ASC"
+    return createFlow(__db, false, arrayOf("workouts")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _result: MutableList<String> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: String
+          _item = _stmt.getText(0)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun getLastWorkoutByTitle(title: String): WorkoutEntity? {
+    val _sql: String = "SELECT * FROM workouts WHERE title = ? ORDER BY startedAt DESC LIMIT 1"
+    return performSuspending(__db, true, false) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindText(_argIndex, title)
+        val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
+        val _cursorIndexOfTitle: Int = getColumnIndexOrThrow(_stmt, "title")
+        val _cursorIndexOfStartedAt: Int = getColumnIndexOrThrow(_stmt, "startedAt")
+        val _cursorIndexOfFinishedAt: Int = getColumnIndexOrThrow(_stmt, "finishedAt")
+        val _cursorIndexOfNotes: Int = getColumnIndexOrThrow(_stmt, "notes")
+        val _result: WorkoutEntity?
+        if (_stmt.step()) {
+          val _tmpId: Long
+          _tmpId = _stmt.getLong(_cursorIndexOfId)
+          val _tmpTitle: String
+          _tmpTitle = _stmt.getText(_cursorIndexOfTitle)
+          val _tmpStartedAt: Long
+          _tmpStartedAt = _stmt.getLong(_cursorIndexOfStartedAt)
+          val _tmpFinishedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfFinishedAt)) {
+            _tmpFinishedAt = null
+          } else {
+            _tmpFinishedAt = _stmt.getLong(_cursorIndexOfFinishedAt)
+          }
+          val _tmpNotes: String?
+          if (_stmt.isNull(_cursorIndexOfNotes)) {
+            _tmpNotes = null
+          } else {
+            _tmpNotes = _stmt.getText(_cursorIndexOfNotes)
+          }
+          _result = WorkoutEntity(_tmpId,_tmpTitle,_tmpStartedAt,_tmpFinishedAt,_tmpNotes)
+        } else {
+          _result = null
         }
         _result
       } finally {

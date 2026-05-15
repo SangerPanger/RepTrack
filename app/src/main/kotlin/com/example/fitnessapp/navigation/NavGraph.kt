@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.fitnessapp.FitnessApp
 import com.example.fitnessapp.ui.components.AppScaffold
-import com.example.fitnessapp.ui.screens.exercises.ExerciseHistoryScreen
-import com.example.fitnessapp.ui.screens.exercises.ExerciseHistoryViewModel
+import com.example.fitnessapp.ui.screens.history.WorkoutHistoryScreen
+import com.example.fitnessapp.ui.screens.history.WorkoutHistoryViewModel
 import com.example.fitnessapp.ui.screens.home.HomeScreen
 import com.example.fitnessapp.ui.screens.home.HomeViewModel
 import com.example.fitnessapp.ui.screens.progress.ProgressScreen
@@ -77,29 +77,35 @@ fun NavGraph(
                 WorkoutSessionScreen(
                     viewModel = viewModel,
                     onFinishWorkout = {
-                        navController.navigate("home") {
-                            popUpTo("home") { inclusive = true }
+                        if (navController.previousBackStackEntry?.destination?.route == "history") {
+                            navController.popBackStack("history", inclusive = false)
+                        } else {
+                            navController.navigate("home") {
+                                popUpTo("home") { inclusive = true }
+                            }
                         }
                     }
                 )
             }
 
-            composable("exercises") {
-                val viewModel: ExerciseHistoryViewModel = viewModel(factory = object : ViewModelProvider.Factory {
+            composable("history") {
+                val viewModel: WorkoutHistoryViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ExerciseHistoryViewModel(app.exerciseRepository) as T
+                        return WorkoutHistoryViewModel(app.workoutRepository) as T
                     }
                 })
-                ExerciseHistoryScreen(
+                WorkoutHistoryScreen(
                     viewModel = viewModel,
-                    onExerciseClick = { /* TODO */ }
+                    onWorkoutClick = { id ->
+                        navController.navigate("workout_session/$id")
+                    }
                 )
             }
 
             composable("progress") {
                 val viewModel: ProgressViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ProgressViewModel(app.progressRepository) as T
+                        return ProgressViewModel(app.progressRepository, app.exerciseRepository) as T
                     }
                 })
                 ProgressScreen(viewModel = viewModel)

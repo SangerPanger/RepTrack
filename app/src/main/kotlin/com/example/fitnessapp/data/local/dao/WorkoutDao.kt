@@ -21,9 +21,18 @@ interface WorkoutDao {
     @Query("SELECT * FROM workouts WHERE id = :id")
     suspend fun getWorkoutById(id: Long): WorkoutEntity?
 
+    @Query("SELECT * FROM workouts WHERE id = :id")
+    fun getWorkoutFlow(id: Long): Flow<WorkoutEntity?>
+
     @Query("SELECT * FROM workouts ORDER BY startedAt DESC LIMIT 1")
     fun getLatestWorkout(): Flow<WorkoutEntity?>
 
     @Query("SELECT COUNT(*) FROM workouts")
     fun getWorkoutCount(): Flow<Int>
+
+    @Query("SELECT DISTINCT title FROM workouts WHERE title IS NOT NULL AND title != '' ORDER BY title ASC")
+    fun getUniqueWorkoutTitles(): Flow<List<String>>
+
+    @Query("SELECT * FROM workouts WHERE title = :title ORDER BY startedAt DESC LIMIT 1")
+    suspend fun getLastWorkoutByTitle(title: String): WorkoutEntity?
 }

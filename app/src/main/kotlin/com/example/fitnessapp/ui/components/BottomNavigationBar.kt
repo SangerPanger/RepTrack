@@ -20,7 +20,7 @@ fun BottomNavigationBar(
 ) {
     val items = listOf(
         NavigationItem("Home", Icons.Default.Home, "home"),
-        NavigationItem("History", Icons.Default.List, "exercises"),
+        NavigationItem("History", Icons.Default.List, "history"),
         NavigationItem("Progress", Icons.Default.Info, "progress"),
         NavigationItem("Settings", Icons.Default.Settings, "settings")
     )

@@ -127,6 +127,72 @@ public class WorkoutExerciseDao_Impl(
     }
   }
 
+  public override suspend fun getWorkoutExercisesWithSetsSuspend(workoutId: Long):
+      List<WorkoutExerciseWithSets> {
+    val _sql: String = "SELECT * FROM workout_exercises WHERE workoutId = ? ORDER BY orderIndex"
+    return performSuspending(__db, true, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, workoutId)
+        val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
+        val _cursorIndexOfWorkoutId: Int = getColumnIndexOrThrow(_stmt, "workoutId")
+        val _cursorIndexOfExerciseId: Int = getColumnIndexOrThrow(_stmt, "exerciseId")
+        val _cursorIndexOfOrderIndex: Int = getColumnIndexOrThrow(_stmt, "orderIndex")
+        val _collectionExercise: LongSparseArray<ExerciseEntity?> =
+            LongSparseArray<ExerciseEntity?>()
+        val _collectionSets: LongSparseArray<MutableList<SetEntity>> =
+            LongSparseArray<MutableList<SetEntity>>()
+        while (_stmt.step()) {
+          val _tmpKey: Long
+          _tmpKey = _stmt.getLong(_cursorIndexOfExerciseId)
+          _collectionExercise.put(_tmpKey, null)
+          val _tmpKey_1: Long
+          _tmpKey_1 = _stmt.getLong(_cursorIndexOfId)
+          if (!_collectionSets.containsKey(_tmpKey_1)) {
+            _collectionSets.put(_tmpKey_1, mutableListOf())
+          }
+        }
+        _stmt.reset()
+        __fetchRelationshipexercisesAscomExampleFitnessappDataLocalEntityExerciseEntity(_connection,
+            _collectionExercise)
+        __fetchRelationshipsetsAscomExampleFitnessappDataLocalEntitySetEntity(_connection,
+            _collectionSets)
+        val _result: MutableList<WorkoutExerciseWithSets> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: WorkoutExerciseWithSets
+          val _tmpWorkoutExercise: WorkoutExerciseEntity
+          val _tmpId: Long
+          _tmpId = _stmt.getLong(_cursorIndexOfId)
+          val _tmpWorkoutId: Long
+          _tmpWorkoutId = _stmt.getLong(_cursorIndexOfWorkoutId)
+          val _tmpExerciseId: Long
+          _tmpExerciseId = _stmt.getLong(_cursorIndexOfExerciseId)
+          val _tmpOrderIndex: Int
+          _tmpOrderIndex = _stmt.getLong(_cursorIndexOfOrderIndex).toInt()
+          _tmpWorkoutExercise =
+              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex)
+          val _tmpExercise: ExerciseEntity?
+          val _tmpKey_2: Long
+          _tmpKey_2 = _stmt.getLong(_cursorIndexOfExerciseId)
+          _tmpExercise = _collectionExercise.get(_tmpKey_2)
+          if (_tmpExercise == null) {
+            error("Relationship item 'exercise' was expected to be NON-NULL but is NULL in @Relation involving a parent column named 'exerciseId' and entityColumn named 'id'.")
+          }
+          val _tmpSetsCollection: MutableList<SetEntity>
+          val _tmpKey_3: Long
+          _tmpKey_3 = _stmt.getLong(_cursorIndexOfId)
+          _tmpSetsCollection = checkNotNull(_collectionSets.get(_tmpKey_3))
+          _item = WorkoutExerciseWithSets(_tmpWorkoutExercise,_tmpExercise,_tmpSetsCollection)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public override fun getWorkoutExercisesByExercise(exerciseId: Long):
       Flow<List<WorkoutExerciseEntity>> {
     val _sql: String = "SELECT * FROM workout_exercises WHERE exerciseId = ?"

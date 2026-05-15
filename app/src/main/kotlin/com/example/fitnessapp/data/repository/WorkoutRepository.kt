@@ -14,17 +14,64 @@ class WorkoutRepository(
     val allWorkouts: Flow<List<WorkoutEntity>> = workoutDao.getAllWorkouts()
     val latestWorkout: Flow<WorkoutEntity?> = workoutDao.getLatestWorkout()
     val workoutCount: Flow<Int> = workoutDao.getWorkoutCount()
+    val uniqueWorkoutTitles: Flow<List<String>> = workoutDao.getUniqueWorkoutTitles()
 
     suspend fun startWorkout(title: String): Long {
-        val workout = WorkoutEntity(title = title, startedAt = System.currentTimeMillis())
-        return workoutDao.insertWorkout(workout)
+        val lastWorkout = workoutDao.getLastWorkoutByTitle(title)
+        val workoutId = workoutDao.insertWorkout(WorkoutEntity(title = title, startedAt = System.currentTimeMillis()))
+        
+        if (lastWorkout != null) {
+            val lastExercises = workoutExerciseDao.getWorkoutExercisesWithSetsSuspend(lastWorkout.id)
+            lastExercises.forEach { exerciseWithSets ->
+                val newWorkoutExerciseId = workoutExerciseDao.insertWorkoutExercise(
+                    WorkoutExerciseEntity(
+                        workoutId = workoutId,
+                        exerciseId = exerciseWithSets.exercise.id,
+                        orderIndex = exerciseWithSets.workoutExercise.orderIndex
+                    )
+                )
+                // Optionally add the same number of sets but reset them
+                exerciseWithSets.sets.forEach { set ->
+                    setDao.insertSet(
+                        SetEntity(
+                            workoutExerciseId = newWorkoutExerciseId,
+                            setNumber = set.setNumber,
+                            reps = set.reps,
+                            weight = set.weight,
+                            completed = false
+                        )
+                    )
+                }
+            }
+        }
+        
+        return workoutId
     }
 
     suspend fun finishWorkout(workoutId: Long, notes: String?) {
         val workout = workoutDao.getWorkoutById(workoutId)
         workout?.let {
-            workoutDao.updateWorkout(it.copy(finishedAt = System.currentTimeMillis(), notes = notes))
+            workoutDao.updateWorkout(it.copy(finishedAt = it.finishedAt ?: System.currentTimeMillis(), notes = notes))
         }
+    }
+
+    suspend fun updateWorkout(workout: WorkoutEntity) {
+        workoutDao.updateWorkout(workout)
+    }
+
+    suspend fun deleteWorkout(workoutId: Long) {
+        val workout = workoutDao.getWorkoutById(workoutId)
+        workout?.let {
+            workoutDao.deleteWorkout(it)
+        }
+    }
+
+    suspend fun getWorkout(workoutId: Long): WorkoutEntity? {
+        return workoutDao.getWorkoutById(workoutId)
+    }
+
+    fun getWorkoutFlow(workoutId: Long): Flow<WorkoutEntity?> {
+        return workoutDao.getWorkoutFlow(workoutId)
     }
 
     fun getWorkoutExercisesWithSets(workoutId: Long): Flow<List<WorkoutExerciseWithSets>> {

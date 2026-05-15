@@ -26,3 +26,8 @@ data class WorkoutExerciseWithSets(
     )
     val sets: List<SetEntity>
 )
+
+data class SetWithDate(
+    @Embedded val setEntity: SetEntity,
+    val startedAt: Long
+)

@@ -8,11 +8,12 @@ class ExerciseRepository(private val exerciseDao: ExerciseDao) {
     val allExercises: Flow<List<ExerciseEntity>> = exerciseDao.getAllExercises()
 
     suspend fun getOrCreateExercise(name: String): ExerciseEntity {
-        val existing = exerciseDao.getExerciseByName(name)
+        val normalizedName = name.trim().replace("\\s+".toRegex(), " ")
+        val existing = exerciseDao.getExerciseByNameIgnoreCase(normalizedName)
         if (existing != null) return existing
         
-        val id = exerciseDao.insertExercise(ExerciseEntity(name = name))
-        return ExerciseEntity(id = id, name = name)
+        val id = exerciseDao.insertExercise(ExerciseEntity(name = normalizedName))
+        return ExerciseEntity(id = id, name = normalizedName)
     }
 
     suspend fun getExerciseById(id: Long): ExerciseEntity? {

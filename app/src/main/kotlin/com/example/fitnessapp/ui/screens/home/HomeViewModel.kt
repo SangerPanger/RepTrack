@@ -14,8 +14,11 @@ class HomeViewModel(private val workoutRepository: WorkoutRepository) : ViewMode
 
     val workoutCount: StateFlow<Int> = workoutRepository.workoutCount
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+    
+    val uniqueWorkoutTitles: StateFlow<List<String>> = workoutRepository.uniqueWorkoutTitles
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    suspend fun startNewWorkout(): Long {
-        return workoutRepository.startWorkout("New Workout")
+    suspend fun startNewWorkout(title: String): Long {
+        return workoutRepository.startWorkout(title)
     }
 }
