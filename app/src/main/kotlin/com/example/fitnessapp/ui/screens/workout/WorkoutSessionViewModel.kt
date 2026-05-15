@@ -8,6 +8,7 @@ import com.example.fitnessapp.data.local.entity.WorkoutEntity
 import com.example.fitnessapp.data.local.entity.WorkoutExerciseWithSets
 import com.example.fitnessapp.data.repository.ExerciseRepository
 import com.example.fitnessapp.data.repository.WorkoutRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +34,12 @@ class WorkoutSessionViewModel(
     private val _availableExercises = MutableStateFlow<List<ExerciseEntity>>(emptyList())
     val availableExercises: StateFlow<List<ExerciseEntity>> = _availableExercises.asStateFlow()
 
+    private val _elapsedTime = MutableStateFlow("00:00:00")
+    val elapsedTime: StateFlow<String> = _elapsedTime.asStateFlow()
+
+    private val _restTimers = MutableStateFlow<Map<Long, String>>(emptyMap())
+    val restTimers: StateFlow<Map<Long, String>> = _restTimers.asStateFlow()
+
     init {
         viewModelScope.launch {
             workoutRepository.getWorkoutFlow(workoutId).collectLatest {
@@ -47,6 +54,41 @@ class WorkoutSessionViewModel(
         viewModelScope.launch {
             exerciseRepository.allExercises.collectLatest {
                 _availableExercises.value = it
+            }
+        }
+        
+        viewModelScope.launch {
+            while (true) {
+                val currentWorkout = _workout.value
+                if (currentWorkout != null && currentWorkout.finishedAt == null) {
+                    val now = System.currentTimeMillis()
+                    
+                    // Workout timer
+                    val elapsedMs = now - currentWorkout.startedAt
+                    val totalSeconds = (elapsedMs / 1000).coerceAtLeast(0)
+                    val seconds = totalSeconds % 60
+                    val minutes = (totalSeconds / 60) % 60
+                    val hours = totalSeconds / 3600
+                    _elapsedTime.value = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                    
+                    // Rest timers for each exercise
+                    val newRestTimers = mutableMapOf<Long, String>()
+                    _workoutExercises.value.forEach { exerciseWithSets ->
+                        val lastCompletedSet = exerciseWithSets.sets
+                            .filter { it.completed && it.completedAt != null }
+                            .maxByOrNull { it.completedAt!! }
+                        
+                        if (lastCompletedSet != null) {
+                            val restMs = now - lastCompletedSet.completedAt!!
+                            val restSeconds = (restMs / 1000).coerceAtLeast(0)
+                            val rSec = restSeconds % 60
+                            val rMin = restSeconds / 60
+                            newRestTimers[exerciseWithSets.workoutExercise.id] = String.format("%02d:%02d", rMin, rSec)
+                        }
+                    }
+                    _restTimers.value = newRestTimers
+                }
+                delay(1000)
             }
         }
     }
@@ -92,7 +134,14 @@ class WorkoutSessionViewModel(
 
     fun updateSet(set: SetEntity) {
         viewModelScope.launch {
-            workoutRepository.updateSet(set)
+            val updatedSet = if (set.completed && set.completedAt == null) {
+                set.copy(completedAt = System.currentTimeMillis())
+            } else if (!set.completed) {
+                set.copy(completedAt = null)
+            } else {
+                set
+            }
+            workoutRepository.updateSet(updatedSet)
             _hasChanges.value = true
         }
     }

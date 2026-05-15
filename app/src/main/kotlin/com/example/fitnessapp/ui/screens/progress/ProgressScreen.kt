@@ -84,35 +84,126 @@ fun ExerciseProgressCard(progress: ExerciseProgress) {
             
             ProgressLineChart(
                 points = progress.historyPoints,
+                projection = progress.projection,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatCard(
-                    label = "EST. 1RM",
+                    label = "CURRENT 1RM",
                     value = String.format("%.1f kg", progress.estimated1RM),
                     modifier = Modifier.weight(1f)
                 )
                 StatCard(
-                    label = "4-WEEK PROJ.",
-                    value = String.format("%+.1f kg", progress.projectedGain),
+                    label = "TOTAL VOLUME",
+                    value = String.format("%.0f kg", progress.totalVolume),
                     modifier = Modifier.weight(1f)
                 )
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            progress.projection?.let { proj ->
+                Spacer(modifier = Modifier.height(24.dp))
+                ProjectionSection(proj)
+            } ?: run {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Not enough data to estimate future progress yet.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProjectionSection(projection: ProgressProjection) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+    ) {
+        Text(
+            text = "4-WEEK PROJECTION",
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = NeonPurple,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                ProjectionStatRow("Est. 1RM", projection.predictedEstimated1RMIn4Weeks, projection.estimated1RMChangePercent, "kg")
+                ProjectionStatRow("Weekly Vol", projection.predictedWeeklyVolumeIn4Weeks, projection.volumeChangePercent, "kg")
+            }
             
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = "CONFIDENCE",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = projection.confidence.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = when(projection.confidence) {
+                        ProjectionConfidence.HIGH -> SuccessGreen
+                        ProjectionConfidence.MEDIUM -> NeonCyan
+                        ProjectionConfidence.LOW -> MaterialTheme.colorScheme.error
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        Text(
+            text = "Projection is based on recent logged training history and may be inaccurate.",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+        )
+    }
+}
+
+@Composable
+fun ProjectionStatRow(label: String, value: Double, change: Double, unit: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Projected Strength: ${String.format("%.1f kg", progress.estimated1RM + progress.projectedGain)}",
+                text = String.format("%.1f %s", value, unit),
                 style = MaterialTheme.typography.bodySmall,
-                color = if (progress.projectedGain >= 0) SuccessGreen else MaterialTheme.colorScheme.error,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = String.format("(%+.1f%%)", change),
+                style = MaterialTheme.typography.labelSmall,
+                color = if (change >= 0) SuccessGreen else MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold
             )
         }

@@ -297,7 +297,7 @@ public class WorkoutExerciseDao_Impl(
       return
     }
     val _stringBuilder: StringBuilder = StringBuilder()
-    _stringBuilder.append("SELECT `id`,`workoutExerciseId`,`setNumber`,`reps`,`weight`,`rpe`,`completed` FROM `sets` WHERE `workoutExerciseId` IN (")
+    _stringBuilder.append("SELECT `id`,`workoutExerciseId`,`setNumber`,`reps`,`weight`,`rpe`,`completedAt`,`completed` FROM `sets` WHERE `workoutExerciseId` IN (")
     val _inputSize: Int = _map.size()
     appendPlaceholders(_stringBuilder, _inputSize)
     _stringBuilder.append(")")
@@ -320,7 +320,8 @@ public class WorkoutExerciseDao_Impl(
       val _cursorIndexOfReps: Int = 3
       val _cursorIndexOfWeight: Int = 4
       val _cursorIndexOfRpe: Int = 5
-      val _cursorIndexOfCompleted: Int = 6
+      val _cursorIndexOfCompletedAt: Int = 6
+      val _cursorIndexOfCompleted: Int = 7
       while (_stmt.step()) {
         val _tmpKey: Long
         _tmpKey = _stmt.getLong(_itemKeyIndex)
@@ -343,12 +344,18 @@ public class WorkoutExerciseDao_Impl(
           } else {
             _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
           }
+          val _tmpCompletedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfCompletedAt)) {
+            _tmpCompletedAt = null
+          } else {
+            _tmpCompletedAt = _stmt.getLong(_cursorIndexOfCompletedAt)
+          }
           val _tmpCompleted: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_cursorIndexOfCompleted).toInt()
           _tmpCompleted = _tmp != 0
           _item_1 =
-              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompletedAt,_tmpCompleted)
           _tmpRelation.add(_item_1)
         }
       }

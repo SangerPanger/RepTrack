@@ -39,7 +39,7 @@ public class SetDao_Impl(
     this.__db = __db
     this.__insertAdapterOfSetEntity = object : EntityInsertAdapter<SetEntity>() {
       protected override fun createQuery(): String =
-          "INSERT OR REPLACE INTO `sets` (`id`,`workoutExerciseId`,`setNumber`,`reps`,`weight`,`rpe`,`completed`) VALUES (nullif(?, 0),?,?,?,?,?,?)"
+          "INSERT OR REPLACE INTO `sets` (`id`,`workoutExerciseId`,`setNumber`,`reps`,`weight`,`rpe`,`completedAt`,`completed`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: SetEntity) {
         statement.bindLong(1, entity.id)
@@ -53,8 +53,14 @@ public class SetDao_Impl(
         } else {
           statement.bindLong(6, _tmpRpe.toLong())
         }
+        val _tmpCompletedAt: Long? = entity.completedAt
+        if (_tmpCompletedAt == null) {
+          statement.bindNull(7)
+        } else {
+          statement.bindLong(7, _tmpCompletedAt)
+        }
         val _tmp: Int = if (entity.completed) 1 else 0
-        statement.bindLong(7, _tmp.toLong())
+        statement.bindLong(8, _tmp.toLong())
       }
     }
     this.__deleteAdapterOfSetEntity = object : EntityDeleteOrUpdateAdapter<SetEntity>() {
@@ -66,7 +72,7 @@ public class SetDao_Impl(
     }
     this.__updateAdapterOfSetEntity = object : EntityDeleteOrUpdateAdapter<SetEntity>() {
       protected override fun createQuery(): String =
-          "UPDATE OR ABORT `sets` SET `id` = ?,`workoutExerciseId` = ?,`setNumber` = ?,`reps` = ?,`weight` = ?,`rpe` = ?,`completed` = ? WHERE `id` = ?"
+          "UPDATE OR ABORT `sets` SET `id` = ?,`workoutExerciseId` = ?,`setNumber` = ?,`reps` = ?,`weight` = ?,`rpe` = ?,`completedAt` = ?,`completed` = ? WHERE `id` = ?"
 
       protected override fun bind(statement: SQLiteStatement, entity: SetEntity) {
         statement.bindLong(1, entity.id)
@@ -80,9 +86,15 @@ public class SetDao_Impl(
         } else {
           statement.bindLong(6, _tmpRpe.toLong())
         }
+        val _tmpCompletedAt: Long? = entity.completedAt
+        if (_tmpCompletedAt == null) {
+          statement.bindNull(7)
+        } else {
+          statement.bindLong(7, _tmpCompletedAt)
+        }
         val _tmp: Int = if (entity.completed) 1 else 0
-        statement.bindLong(7, _tmp.toLong())
-        statement.bindLong(8, entity.id)
+        statement.bindLong(8, _tmp.toLong())
+        statement.bindLong(9, entity.id)
       }
     }
   }
@@ -116,6 +128,7 @@ public class SetDao_Impl(
         val _cursorIndexOfReps: Int = getColumnIndexOrThrow(_stmt, "reps")
         val _cursorIndexOfWeight: Int = getColumnIndexOrThrow(_stmt, "weight")
         val _cursorIndexOfRpe: Int = getColumnIndexOrThrow(_stmt, "rpe")
+        val _cursorIndexOfCompletedAt: Int = getColumnIndexOrThrow(_stmt, "completedAt")
         val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
         val _result: MutableList<SetEntity> = mutableListOf()
         while (_stmt.step()) {
@@ -136,12 +149,18 @@ public class SetDao_Impl(
           } else {
             _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
           }
+          val _tmpCompletedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfCompletedAt)) {
+            _tmpCompletedAt = null
+          } else {
+            _tmpCompletedAt = _stmt.getLong(_cursorIndexOfCompletedAt)
+          }
           val _tmpCompleted: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_cursorIndexOfCompleted).toInt()
           _tmpCompleted = _tmp != 0
           _item =
-              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompletedAt,_tmpCompleted)
           _result.add(_item)
         }
         _result
@@ -174,6 +193,7 @@ public class SetDao_Impl(
         val _cursorIndexOfReps: Int = getColumnIndexOrThrow(_stmt, "reps")
         val _cursorIndexOfWeight: Int = getColumnIndexOrThrow(_stmt, "weight")
         val _cursorIndexOfRpe: Int = getColumnIndexOrThrow(_stmt, "rpe")
+        val _cursorIndexOfCompletedAt: Int = getColumnIndexOrThrow(_stmt, "completedAt")
         val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
         val _cursorIndexOfStartedAt: Int = getColumnIndexOrThrow(_stmt, "startedAt")
         val _result: MutableList<SetWithDate> = mutableListOf()
@@ -198,12 +218,18 @@ public class SetDao_Impl(
           } else {
             _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
           }
+          val _tmpCompletedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfCompletedAt)) {
+            _tmpCompletedAt = null
+          } else {
+            _tmpCompletedAt = _stmt.getLong(_cursorIndexOfCompletedAt)
+          }
           val _tmpCompleted: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_cursorIndexOfCompleted).toInt()
           _tmpCompleted = _tmp != 0
           _tmpSetEntity =
-              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompletedAt,_tmpCompleted)
           _item = SetWithDate(_tmpSetEntity,_tmpStartedAt)
           _result.add(_item)
         }
@@ -228,6 +254,7 @@ public class SetDao_Impl(
         val _cursorIndexOfReps: Int = getColumnIndexOrThrow(_stmt, "reps")
         val _cursorIndexOfWeight: Int = getColumnIndexOrThrow(_stmt, "weight")
         val _cursorIndexOfRpe: Int = getColumnIndexOrThrow(_stmt, "rpe")
+        val _cursorIndexOfCompletedAt: Int = getColumnIndexOrThrow(_stmt, "completedAt")
         val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
         val _result: MutableList<SetEntity> = mutableListOf()
         while (_stmt.step()) {
@@ -248,12 +275,18 @@ public class SetDao_Impl(
           } else {
             _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
           }
+          val _tmpCompletedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfCompletedAt)) {
+            _tmpCompletedAt = null
+          } else {
+            _tmpCompletedAt = _stmt.getLong(_cursorIndexOfCompletedAt)
+          }
           val _tmpCompleted: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_cursorIndexOfCompleted).toInt()
           _tmpCompleted = _tmp != 0
           _item =
-              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompleted)
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpCompletedAt,_tmpCompleted)
           _result.add(_item)
         }
         _result

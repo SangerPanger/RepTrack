@@ -25,5 +25,6 @@ data class SetEntity(
     val reps: Int,
     val weight: Double,
     val rpe: Int? = null,
+    val completedAt: Long? = null,
     val completed: Boolean = false
 )

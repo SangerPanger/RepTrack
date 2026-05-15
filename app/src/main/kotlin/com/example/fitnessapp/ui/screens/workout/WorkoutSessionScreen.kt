@@ -30,6 +30,8 @@ fun WorkoutSessionScreen(
     val workout by viewModel.workout.collectAsState()
     val workoutExercises by viewModel.workoutExercises.collectAsState()
     val availableExercises by viewModel.availableExercises.collectAsState()
+    val elapsedTime by viewModel.elapsedTime.collectAsState()
+    val restTimers by viewModel.restTimers.collectAsState()
     var showAddExerciseDialog by remember { mutableStateOf(false) }
     var newExerciseName by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
@@ -187,6 +189,18 @@ fun WorkoutSessionScreen(
                                         )
                                     }
                                 }
+                            } else {
+                                // Live Timer Row
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Current Duration: $elapsedTime",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
+                                }
                             }
                         }
                     }
@@ -229,6 +243,26 @@ fun WorkoutSessionScreen(
                                     viewModel.updateSet(set.copy(completed = it))
                                 }
                             )
+                        }
+
+                        // Rest Timer Display
+                        restTimers[exerciseWithSets.workoutExercise.id]?.let { restTime ->
+                            if (workout?.finishedAt == null) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 8.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "REST: $restTime",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
                         }
                     }
                 }
