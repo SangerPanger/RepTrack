@@ -8,7 +8,7 @@ data class WorkoutWithExercises(
     @Relation(
         entity = WorkoutExerciseEntity::class,
         parentColumn = "id",
-        childColumn = "workoutId"
+        entityColumn = "workoutId"
     )
     val workoutExercises: List<WorkoutExerciseWithSets>
 )
@@ -17,12 +17,12 @@ data class WorkoutExerciseWithSets(
     @Embedded val workoutExercise: WorkoutExerciseEntity,
     @Relation(
         parentColumn = "exerciseId",
-        childColumn = "id"
+        entityColumn = "id"
     )
     val exercise: ExerciseEntity,
     @Relation(
         parentColumn = "id",
-        childColumn = "workoutExerciseId"
+        entityColumn = "workoutExerciseId"
     )
     val sets: List<SetEntity>
 )

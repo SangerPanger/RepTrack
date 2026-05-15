@@ -1,10 +1,7 @@
 package com.example.fitnessapp.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShowChart
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,8 +20,8 @@ fun BottomNavigationBar(
 ) {
     val items = listOf(
         NavigationItem("Home", Icons.Default.Home, "home"),
-        NavigationItem("History", Icons.Default.History, "exercises"),
-        NavigationItem("Progress", Icons.Default.ShowChart, "progress"),
+        NavigationItem("History", Icons.Default.List, "exercises"),
+        NavigationItem("Progress", Icons.Default.Info, "progress"),
         NavigationItem("Settings", Icons.Default.Settings, "settings")
     )
 
