@@ -74,12 +74,19 @@ class WorkoutSessionViewModel(
                     // Rest timers for each exercise
                     val newRestTimers = mutableMapOf<Long, String>()
                     _workoutExercises.value.forEach { exerciseWithSets ->
-                        val lastCompletedSet = exerciseWithSets.sets
-                            .filter { it.completed && it.completedAt != null }
-                            .maxByOrNull { it.completedAt!! }
+                        val allSetsCompleted = exerciseWithSets.sets.isNotEmpty() && exerciseWithSets.sets.all { it.completed }
                         
-                        if (lastCompletedSet != null) {
-                            val restMs = now - lastCompletedSet.completedAt!!
+                        if (allSetsCompleted) {
+                            // If all sets are finished, we don't need a rest timer for the next set
+                            newRestTimers[exerciseWithSets.workoutExercise.id] = "00:00"
+                        } else {
+                            val lastCompletedSet = exerciseWithSets.sets
+                                .filter { it.completed && it.completedAt != null }
+                                .maxByOrNull { it.completedAt!! }
+                            
+                            val referenceTime = lastCompletedSet?.completedAt ?: currentWorkout.startedAt
+                            
+                            val restMs = now - referenceTime
                             val restSeconds = (restMs / 1000).coerceAtLeast(0)
                             val rSec = restSeconds % 60
                             val rMin = restSeconds / 60
@@ -128,6 +135,28 @@ class WorkoutSessionViewModel(
                 reps = lastSet?.reps ?: 10,
                 weight = lastSet?.weight ?: 0.0
             )
+            _hasChanges.value = true
+        }
+    }
+
+    fun deleteSet(set: SetEntity) {
+        viewModelScope.launch {
+            workoutRepository.deleteSet(set)
+            
+            // Reorder remaining sets for this workoutExercise
+            val currentExerciseWithSets = _workoutExercises.value.find { it.workoutExercise.id == set.workoutExerciseId }
+            currentExerciseWithSets?.let { exerciseWithSets ->
+                val remainingSets = exerciseWithSets.sets
+                    .filter { it.id != set.id }
+                    .sortedBy { it.setNumber }
+                
+                remainingSets.forEachIndexed { index, remainingSet ->
+                    val newNumber = index + 1
+                    if (remainingSet.setNumber != newNumber) {
+                        workoutRepository.updateSet(remainingSet.copy(setNumber = newNumber))
+                    }
+                }
+            }
             _hasChanges.value = true
         }
     }

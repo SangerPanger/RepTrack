@@ -58,7 +58,7 @@ fun NavGraph(
                 })
                 HomeScreen(
                     viewModel = viewModel,
-                    onStartWorkout = { id ->
+                    onWorkoutClick = { id ->
                         navController.navigate("workout_session/$id")
                     }
                 )

@@ -1,5 +1,6 @@
 package com.example.fitnessapp.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -19,7 +20,7 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    onStartWorkout: (Long) -> Unit
+    onWorkoutClick: (Long) -> Unit
 ) {
     val latestWorkout by viewModel.latestWorkout.collectAsState()
     val workoutCount by viewModel.workoutCount.collectAsState()
@@ -97,7 +98,8 @@ fun HomeScreen(
                 
                 StatCard(
                     label = "${workout.title} - $dateStr$duration",
-                    value = if (workout.finishedAt != null) "Completed" else "In Progress"
+                    value = if (workout.finishedAt != null) "Completed" else "In Progress",
+                    modifier = Modifier.clickable { onWorkoutClick(workout.id) }
                 )
             }
         }
@@ -146,7 +148,7 @@ fun HomeScreen(
                     if (workoutTitle.isNotBlank()) {
                         scope.launch {
                             val id = viewModel.startNewWorkout(workoutTitle)
-                            onStartWorkout(id)
+                            onWorkoutClick(id)
                             showStartDialog = false
                             workoutTitle = ""
                         }

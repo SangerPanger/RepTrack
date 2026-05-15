@@ -225,7 +225,21 @@ fun WorkoutSessionScreen(
                             }
                         }
                         
-                        exerciseWithSets.sets.forEach { set ->
+                        exerciseWithSets.sets.forEachIndexed { index, set ->
+                            val previousSetCompletedAt = if (index > 0) {
+                                exerciseWithSets.sets[index - 1].completedAt
+                            } else {
+                                workout?.startedAt
+                            }
+                            
+                            val restTimeStr = if (set.completedAt != null && previousSetCompletedAt != null) {
+                                val restMs = set.completedAt - previousSetCompletedAt
+                                val restSeconds = (restMs / 1000).coerceAtLeast(0)
+                                val rSec = restSeconds % 60
+                                val rMin = restSeconds / 60
+                                String.format("%02d:%02d", rMin, rSec)
+                            } else null
+
                             ExerciseSetRow(
                                 setNumber = set.setNumber,
                                 reps = set.reps.toString(),
@@ -241,7 +255,11 @@ fun WorkoutSessionScreen(
                                 },
                                 onCompletedChange = {
                                     viewModel.updateSet(set.copy(completed = it))
-                                }
+                                },
+                                onDelete = {
+                                    viewModel.deleteSet(set)
+                                },
+                                restTime = restTimeStr
                             )
                         }
 
