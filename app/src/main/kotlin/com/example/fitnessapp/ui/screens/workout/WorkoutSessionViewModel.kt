@@ -109,7 +109,8 @@ class WorkoutSessionViewModel(
                     workoutExerciseId = workoutExerciseId,
                     setNumber = 1,
                     reps = 10,
-                    weight = initialWeight
+                    weight = initialWeight,
+                    isDrop = false
                 )
             }
             _hasChanges.value = true
@@ -124,7 +125,8 @@ class WorkoutSessionViewModel(
                     workoutExerciseId = workoutExerciseId,
                     setNumber = 1,
                     reps = 10,
-                    weight = initialWeight
+                    weight = initialWeight,
+                    isDrop = false
                 )
             }
             _hasChanges.value = true
@@ -159,7 +161,8 @@ class WorkoutSessionViewModel(
                 workoutExerciseId = workoutExerciseId,
                 setNumber = nextSetNumber,
                 reps = lastSet?.reps ?: 10,
-                weight = weight
+                weight = weight,
+                isDrop = true
             )
             _hasChanges.value = true
         }
@@ -182,7 +185,8 @@ class WorkoutSessionViewModel(
                 workoutExerciseId = workoutExerciseId,
                 setNumber = nextSetNumber,
                 reps = lastSet?.reps ?: 10,
-                weight = weight
+                weight = weight,
+                isDrop = false
             )
             _hasChanges.value = true
         }

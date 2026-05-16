@@ -41,6 +41,7 @@ class WorkoutRepository(
                             setNumber = set.setNumber,
                             reps = set.reps,
                             weight = set.weight,
+                            isDrop = set.isDrop,
                             completed = false
                         )
                     )
@@ -101,9 +102,9 @@ class WorkoutRepository(
         )
     }
 
-    suspend fun addSet(workoutExerciseId: Long, setNumber: Int, reps: Int, weight: Double, rpe: Int? = null) {
+    suspend fun addSet(workoutExerciseId: Long, setNumber: Int, reps: Int, weight: Double, rpe: Int? = null, isDrop: Boolean = false) {
         setDao.insertSet(
-            SetEntity(workoutExerciseId = workoutExerciseId, setNumber = setNumber, reps = reps, weight = weight, rpe = rpe)
+            SetEntity(workoutExerciseId = workoutExerciseId, setNumber = setNumber, reps = reps, weight = weight, rpe = rpe, isDrop = isDrop)
         )
     }
 

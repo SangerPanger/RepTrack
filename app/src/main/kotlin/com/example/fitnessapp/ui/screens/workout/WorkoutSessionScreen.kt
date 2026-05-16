@@ -225,11 +225,6 @@ fun WorkoutSessionScreen(
                                 modifier = Modifier.weight(1f)
                             )
                             Row {
-                                if (exerciseWithSets.workoutExercise.isDropset) {
-                                    IconButton(onClick = { viewModel.addDrop(exerciseWithSets.workoutExercise.id) }) {
-                                        Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Add Drop", tint = MaterialTheme.colorScheme.secondary)
-                                    }
-                                }
                                 IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
                                     Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
                                 }
@@ -254,6 +249,8 @@ fun WorkoutSessionScreen(
                                 String.format("%02d:%02d", rMin, rSec)
                             } else null
 
+                            val isLastInGroup = index == exerciseWithSets.sets.size - 1 || !exerciseWithSets.sets[index + 1].isDrop
+
                             ExerciseSetRow(
                                 setNumber = set.setNumber,
                                 reps = set.reps.toString(),
@@ -273,8 +270,27 @@ fun WorkoutSessionScreen(
                                 onDelete = {
                                     viewModel.deleteSet(set)
                                 },
-                                restTime = restTimeStr
+                                restTime = restTimeStr,
+                                isDrop = set.isDrop,
+                                isLastInGroup = isLastInGroup
                             )
+                        }
+
+                        if (exerciseWithSets.workoutExercise.isDropset && exerciseWithSets.sets.isNotEmpty()) {
+                            TextButton(
+                                onClick = { viewModel.addDrop(exerciseWithSets.workoutExercise.id) },
+                                modifier = Modifier.align(Alignment.End).padding(end = 16.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text("Add-drop", style = MaterialTheme.typography.labelLarge, color = NeonPurple)
+                                    Icon(
+                                        Icons.Default.KeyboardArrowDown, 
+                                        contentDescription = null, 
+                                        tint = NeonPurple,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
                         }
 
                         // Rest Timer Display
