@@ -20,13 +20,16 @@ interface FoodLogDao {
     fun getAllFoodLogs(): Flow<List<FoodLogEntity>>
 
     @Insert
-    suspend fun insertFoodLog(foodLog: FoodLogEntity)
+    suspend fun insertFoodLog(foodLog: FoodLogEntity): Long
 
     @Update
     suspend fun updateFoodLog(foodLog: FoodLogEntity)
 
     @Delete
     suspend fun deleteFoodLog(foodLog: FoodLogEntity)
+
+    @Query("DELETE FROM food_logs WHERE id = :id")
+    suspend fun deleteFoodLogById(id: Long)
 
     @Query("DELETE FROM food_logs WHERE date >= :startTime AND date <= :endTime")
     suspend fun deleteFoodLogsInRange(startTime: Long, endTime: Long)

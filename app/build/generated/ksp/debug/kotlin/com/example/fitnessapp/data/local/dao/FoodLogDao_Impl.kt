@@ -71,9 +71,10 @@ public class FoodLogDao_Impl(
     }
   }
 
-  public override suspend fun insertFoodLog(foodLog: FoodLogEntity): Unit = performSuspending(__db,
+  public override suspend fun insertFoodLog(foodLog: FoodLogEntity): Long = performSuspending(__db,
       false, true) { _connection ->
-    __insertAdapterOfFoodLogEntity.insert(_connection, foodLog)
+    val _result: Long = __insertAdapterOfFoodLogEntity.insertAndReturnId(_connection, foodLog)
+    _result
   }
 
   public override suspend fun deleteFoodLog(foodLog: FoodLogEntity): Unit = performSuspending(__db,
@@ -116,6 +117,20 @@ public class FoodLogDao_Impl(
           _result.add(_item)
         }
         _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun deleteFoodLogById(id: Long) {
+    val _sql: String = "DELETE FROM food_logs WHERE id = ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, id)
+        _stmt.step()
       } finally {
         _stmt.close()
       }

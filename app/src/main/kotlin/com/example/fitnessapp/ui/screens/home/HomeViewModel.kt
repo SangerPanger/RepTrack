@@ -26,8 +26,12 @@ class HomeViewModel(
     private val _selectedDate = MutableStateFlow(System.currentTimeMillis())
     val selectedDate: StateFlow<Long> = _selectedDate.asStateFlow()
 
+    private val _lastAddedFoodLogId = MutableStateFlow<Long?>(null)
+    val lastAddedFoodLogId: StateFlow<Long?> = _lastAddedFoodLogId.asStateFlow()
+
     fun setSelectedDate(date: Long) {
         _selectedDate.value = date
+        _lastAddedFoodLogId.value = null // Reset undo on date change
     }
 
     val foodLogForDate: StateFlow<FoodLogEntity?> = combine(foodRepository.getAllFoodLogs(), _selectedDate) { logs, date ->
@@ -66,7 +70,7 @@ class HomeViewModel(
 
     fun addFoodLog(carbs: Double, fats: Double, protein: Double, calories: Double, date: Long = System.currentTimeMillis()) {
         viewModelScope.launch {
-            foodRepository.addFoodLog(
+            val id = foodRepository.addFoodLog(
                 FoodLogEntity(
                     date = date,
                     carbs = carbs,
@@ -75,6 +79,16 @@ class HomeViewModel(
                     calories = calories
                 )
             )
+            _lastAddedFoodLogId.value = id
+        }
+    }
+
+    fun undoLastFoodLog() {
+        viewModelScope.launch {
+            _lastAddedFoodLogId.value?.let { id ->
+                foodRepository.deleteFoodLogById(id)
+                _lastAddedFoodLogId.value = null
+            }
         }
     }
 }

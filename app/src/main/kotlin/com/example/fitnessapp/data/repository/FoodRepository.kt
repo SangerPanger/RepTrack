@@ -18,8 +18,12 @@ class FoodRepository(
 
     fun getAllFoodLogs(): Flow<List<FoodLogEntity>> = foodLogDao.getAllFoodLogs()
 
-    suspend fun addFoodLog(foodLog: FoodLogEntity) {
-        foodLogDao.insertFoodLog(foodLog)
+    suspend fun addFoodLog(foodLog: FoodLogEntity): Long {
+        return foodLogDao.insertFoodLog(foodLog)
+    }
+
+    suspend fun deleteFoodLogById(id: Long) {
+        foodLogDao.deleteFoodLogById(id)
     }
 
     suspend fun updateFoodLog(foodLog: FoodLogEntity) {

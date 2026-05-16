@@ -33,6 +33,7 @@ fun HomeScreen(
     val uniqueTitles by viewModel.uniqueWorkoutTitles.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
     val foodLogForDate by viewModel.foodLogForDate.collectAsState()
+    val lastAddedFoodLogId by viewModel.lastAddedFoodLogId.collectAsState()
     val scope = rememberCoroutineScope()
 
     var showStartDialog by remember { mutableStateOf(false) }
@@ -146,12 +147,14 @@ fun HomeScreen(
                 // Food Log View
                 item {
                     FoodLogEntrySection(
-                    selectedDate = selectedDate,
-                    onDateChange = { viewModel.setSelectedDate(it) },
-                    onAddLog = { c, f, p, cal, date ->
-                        viewModel.addFoodLog(c, f, p, cal, date)
-                    }
-                )
+                        selectedDate = selectedDate,
+                        onDateChange = { viewModel.setSelectedDate(it) },
+                        onAddLog = { c, f, p, cal, date ->
+                            viewModel.addFoodLog(c, f, p, cal, date)
+                        },
+                        showUndo = lastAddedFoodLogId != null,
+                        onUndo = { viewModel.undoLastFoodLog() }
+                    )
                 }
 
                 item {
@@ -287,7 +290,9 @@ fun HomeScreen(
 fun FoodLogEntrySection(
     selectedDate: Long,
     onDateChange: (Long) -> Unit,
-    onAddLog: (Double, Double, Double, Double, Long) -> Unit
+    onAddLog: (Double, Double, Double, Double, Long) -> Unit,
+    showUndo: Boolean = false,
+    onUndo: () -> Unit = {}
 ) {
     var carbs by remember { mutableStateOf("") }
     var fats by remember { mutableStateOf("") }
@@ -363,18 +368,33 @@ fun FoodLogEntrySection(
             )
         }
 
-        TextButton(
-            onClick = {
-                val c = carbs.toDoubleOrNull() ?: 0.0
-                val f = fats.toDoubleOrNull() ?: 0.0
-                val p = protein.toDoubleOrNull() ?: 0.0
-                // (protein*4, Carbs*4, Fats*8) = calories
-                val cal = (p * 4) + (c * 4) + (f * 8)
-                calories = cal.toString()
-            },
-            modifier = Modifier.align(Alignment.End)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Auto calculate calories")
+            if (showUndo) {
+                TextButton(
+                    onClick = onUndo
+                ) {
+                    Text("UNDO RECENT ADDITION", color = MaterialTheme.colorScheme.error)
+                }
+            } else {
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            TextButton(
+                onClick = {
+                    val c = carbs.toDoubleOrNull() ?: 0.0
+                    val f = fats.toDoubleOrNull() ?: 0.0
+                    val p = protein.toDoubleOrNull() ?: 0.0
+                    // (protein*4, Carbs*4, Fats*8) = calories
+                    val cal = (p * 4) + (c * 4) + (f * 8)
+                    calories = cal.toString()
+                }
+            ) {
+                Text("Auto calculate calories")
+            }
         }
         
         PrimaryNeonButton(
