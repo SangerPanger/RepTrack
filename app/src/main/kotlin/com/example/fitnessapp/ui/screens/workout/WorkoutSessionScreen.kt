@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import com.example.fitnessapp.ui.components.ExerciseSetRow
 import com.example.fitnessapp.ui.components.NeonCard
 import com.example.fitnessapp.ui.components.PrimaryNeonButton
@@ -224,7 +225,12 @@ fun WorkoutSessionScreen(
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.weight(1f)
                             )
-                            Row {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "Add-set",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
                                 IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
                                     Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
                                 }
@@ -361,23 +367,14 @@ fun WorkoutSessionScreen(
                             DropdownMenu(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
-                                modifier = Modifier.fillMaxWidth(0.8f)
+                                modifier = Modifier.fillMaxWidth(0.8f),
+                                properties = PopupProperties(focusable = false)
                             ) {
                                 filteredExercises.forEach { exercise ->
                                     DropdownMenuItem(
                                         text = { Text(exercise.name) },
                                         onClick = {
-                                            viewModel.addExerciseById(
-                                                exerciseId = exercise.id,
-                                                isDropset = isDropset,
-                                                initialWeight = startingWeight.toDoubleOrNull() ?: 0.0,
-                                                dropDecrease = weightDecrease.toDoubleOrNull() ?: 0.0
-                                            )
-                                            newExerciseName = ""
-                                            isDropset = false
-                                            startingWeight = ""
-                                            weightDecrease = ""
-                                            showAddExerciseDialog = false
+                                            newExerciseName = exercise.name
                                             expanded = false
                                         }
                                     )

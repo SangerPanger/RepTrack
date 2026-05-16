@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import com.example.fitnessapp.ui.components.PrimaryNeonButton
 import com.example.fitnessapp.ui.components.StatCard
 import kotlinx.coroutines.launch
@@ -128,7 +129,8 @@ fun HomeScreen(
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                            modifier = Modifier.fillMaxWidth(0.8f),
+                            properties = PopupProperties(focusable = false)
                         ) {
                             filteredTitles.forEach { title ->
                                 DropdownMenuItem(
