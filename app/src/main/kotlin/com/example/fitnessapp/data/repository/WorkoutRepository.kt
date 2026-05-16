@@ -27,7 +27,10 @@ class WorkoutRepository(
                     WorkoutExerciseEntity(
                         workoutId = workoutId,
                         exerciseId = exerciseWithSets.exercise.id,
-                        orderIndex = exerciseWithSets.workoutExercise.orderIndex
+                        orderIndex = exerciseWithSets.workoutExercise.orderIndex,
+                        isDropset = exerciseWithSets.workoutExercise.isDropset,
+                        startingWeight = exerciseWithSets.workoutExercise.startingWeight,
+                        dropWeightDecrease = exerciseWithSets.workoutExercise.dropWeightDecrease
                     )
                 )
                 // Optionally add the same number of sets but reset them
@@ -78,9 +81,23 @@ class WorkoutRepository(
         return workoutExerciseDao.getWorkoutExercisesWithSets(workoutId)
     }
 
-    suspend fun addExerciseToWorkout(workoutId: Long, exerciseId: Long, orderIndex: Int): Long {
+    suspend fun addExerciseToWorkout(
+        workoutId: Long, 
+        exerciseId: Long, 
+        orderIndex: Int, 
+        isDropset: Boolean = false,
+        startingWeight: Double = 0.0,
+        dropWeightDecrease: Double = 0.0
+    ): Long {
         return workoutExerciseDao.insertWorkoutExercise(
-            WorkoutExerciseEntity(workoutId = workoutId, exerciseId = exerciseId, orderIndex = orderIndex)
+            WorkoutExerciseEntity(
+                workoutId = workoutId, 
+                exerciseId = exerciseId, 
+                orderIndex = orderIndex, 
+                isDropset = isDropset,
+                startingWeight = startingWeight,
+                dropWeightDecrease = dropWeightDecrease
+            )
         )
     }
 
@@ -96,5 +113,9 @@ class WorkoutRepository(
 
     suspend fun deleteSet(set: SetEntity) {
         setDao.deleteSet(set)
+    }
+
+    suspend fun deleteWorkoutExercise(workoutExerciseId: Long) {
+        workoutExerciseDao.deleteWorkoutExerciseById(workoutExerciseId)
     }
 }

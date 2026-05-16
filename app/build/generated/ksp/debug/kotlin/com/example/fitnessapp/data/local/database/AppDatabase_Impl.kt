@@ -57,18 +57,18 @@ public class AppDatabase_Impl : AppDatabase() {
 
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(2,
-        "438499429411035a9ed6f953f33ae5e7", "2a0e8b198f903c72f49f7579e6a446c0") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3,
+        "50ecbd40d85b9627caad532adf527e15", "7ccf1c68f3fdc3cc5b47fb46259e2761") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `workouts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `finishedAt` INTEGER, `notes` TEXT)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `muscleGroup` TEXT)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `workout_exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutId` INTEGER NOT NULL, `exerciseId` INTEGER NOT NULL, `orderIndex` INTEGER NOT NULL, FOREIGN KEY(`workoutId`) REFERENCES `workouts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`exerciseId`) REFERENCES `exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `workout_exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutId` INTEGER NOT NULL, `exerciseId` INTEGER NOT NULL, `orderIndex` INTEGER NOT NULL, `isDropset` INTEGER NOT NULL, `startingWeight` REAL NOT NULL, `dropWeightDecrease` REAL NOT NULL, FOREIGN KEY(`workoutId`) REFERENCES `workouts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`exerciseId`) REFERENCES `exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_exercises_workoutId` ON `workout_exercises` (`workoutId`)")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_exercises_exerciseId` ON `workout_exercises` (`exerciseId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `sets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutExerciseId` INTEGER NOT NULL, `setNumber` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `rpe` INTEGER, `completedAt` INTEGER, `completed` INTEGER NOT NULL, FOREIGN KEY(`workoutExerciseId`) REFERENCES `workout_exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_sets_workoutExerciseId` ON `sets` (`workoutExerciseId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '438499429411035a9ed6f953f33ae5e7')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '50ecbd40d85b9627caad532adf527e15')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -150,6 +150,12 @@ public class AppDatabase_Impl : AppDatabase() {
             0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsWorkoutExercises.put("orderIndex", TableInfo.Column("orderIndex", "INTEGER", true,
             0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsWorkoutExercises.put("isDropset", TableInfo.Column("isDropset", "INTEGER", true, 0,
+            null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsWorkoutExercises.put("startingWeight", TableInfo.Column("startingWeight", "REAL",
+            true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsWorkoutExercises.put("dropWeightDecrease", TableInfo.Column("dropWeightDecrease",
+            "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysWorkoutExercises: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         _foreignKeysWorkoutExercises.add(TableInfo.ForeignKey("workouts", "CASCADE", "NO ACTION",
             listOf("workoutId"), listOf("id")))

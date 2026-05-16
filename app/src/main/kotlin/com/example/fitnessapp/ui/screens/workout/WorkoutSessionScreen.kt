@@ -3,15 +3,15 @@ package com.example.fitnessapp.ui.screens.workout
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.fitnessapp.ui.components.ExerciseSetRow
 import com.example.fitnessapp.ui.components.NeonCard
@@ -34,6 +34,9 @@ fun WorkoutSessionScreen(
     val restTimers by viewModel.restTimers.collectAsState()
     var showAddExerciseDialog by remember { mutableStateOf(false) }
     var newExerciseName by remember { mutableStateOf("") }
+    var isDropset by remember { mutableStateOf(false) }
+    var startingWeight by remember { mutableStateOf("") }
+    var weightDecrease by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
 
     var showEditTitleDialog by remember { mutableStateOf(false) }
@@ -211,17 +214,28 @@ fun WorkoutSessionScreen(
                 NeonCard {
                     Column {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = exerciseWithSets.exercise.name.uppercase(),
+                                text = (exerciseWithSets.exercise.name + (if (exerciseWithSets.workoutExercise.isDropset) " (DS)" else "")).uppercase(),
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
                             )
-                            IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
-                                Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
+                            Row {
+                                if (exerciseWithSets.workoutExercise.isDropset) {
+                                    IconButton(onClick = { viewModel.addDrop(exerciseWithSets.workoutExercise.id) }) {
+                                        Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Add Drop", tint = MaterialTheme.colorScheme.secondary)
+                                    }
+                                }
+                                IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
+                                    Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
+                                }
+                                IconButton(onClick = { viewModel.deleteExercise(exerciseWithSets.workoutExercise.id) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Remove Exercise", tint = MaterialTheme.colorScheme.error)
+                                }
                             }
                         }
                         
@@ -309,46 +323,95 @@ fun WorkoutSessionScreen(
             onDismissRequest = { 
                 showAddExerciseDialog = false
                 expanded = false
+                isDropset = false
+                startingWeight = ""
+                weightDecrease = ""
             },
             title = { Text("Add Exercise") },
             text = {
-                Box {
-                    OutlinedTextField(
-                        value = newExerciseName,
-                        onValueChange = { 
-                            newExerciseName = it
-                            expanded = true
-                        },
-                        label = { Text("Exercise Name") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    
-                    if (expanded && filteredExercises.isNotEmpty()) {
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth(0.8f)
-                        ) {
-                            filteredExercises.forEach { exercise ->
-                                DropdownMenuItem(
-                                    text = { Text(exercise.name) },
-                                    onClick = {
-                                        viewModel.addExerciseById(exercise.id)
-                                        newExerciseName = ""
-                                        showAddExerciseDialog = false
-                                        expanded = false
-                                    }
-                                )
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Box {
+                        OutlinedTextField(
+                            value = newExerciseName,
+                            onValueChange = { 
+                                newExerciseName = it
+                                expanded = true
+                            },
+                            label = { Text("Exercise Name") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        
+                        if (expanded && filteredExercises.isNotEmpty()) {
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            ) {
+                                filteredExercises.forEach { exercise ->
+                                    DropdownMenuItem(
+                                        text = { Text(exercise.name) },
+                                        onClick = {
+                                            viewModel.addExerciseById(
+                                                exerciseId = exercise.id,
+                                                isDropset = isDropset,
+                                                initialWeight = startingWeight.toDoubleOrNull() ?: 0.0,
+                                                dropDecrease = weightDecrease.toDoubleOrNull() ?: 0.0
+                                            )
+                                            newExerciseName = ""
+                                            isDropset = false
+                                            startingWeight = ""
+                                            weightDecrease = ""
+                                            showAddExerciseDialog = false
+                                            expanded = false
+                                        }
+                                    )
+                                }
                             }
                         }
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Checkbox(
+                            checked = isDropset,
+                            onCheckedChange = { isDropset = it }
+                        )
+                        Text("Dropset")
+                    }
+
+                    if (isDropset) {
+                        OutlinedTextField(
+                            value = startingWeight,
+                            onValueChange = { startingWeight = it },
+                            label = { Text("Starting Weight (kg/lbs)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
+                        OutlinedTextField(
+                            value = weightDecrease,
+                            onValueChange = { weightDecrease = it },
+                            label = { Text("Weight Decrease per Drop") },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
                     }
                 }
             },
             confirmButton = {
                 Button(onClick = {
                     if (newExerciseName.isNotBlank()) {
-                        viewModel.addExercise(newExerciseName)
+                        viewModel.addExercise(
+                            name = newExerciseName,
+                            isDropset = isDropset,
+                            initialWeight = startingWeight.toDoubleOrNull() ?: 0.0,
+                            dropDecrease = weightDecrease.toDoubleOrNull() ?: 0.0
+                        )
                         newExerciseName = ""
+                        isDropset = false
+                        startingWeight = ""
+                        weightDecrease = ""
                         showAddExerciseDialog = false
                         expanded = false
                     }
@@ -360,6 +423,9 @@ fun WorkoutSessionScreen(
                 TextButton(onClick = { 
                     showAddExerciseDialog = false
                     expanded = false
+                    isDropset = false
+                    startingWeight = ""
+                    weightDecrease = ""
                 }) {
                     Text("Cancel")
                 }

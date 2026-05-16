@@ -28,5 +28,8 @@ data class WorkoutExerciseEntity(
     val id: Long = 0,
     val workoutId: Long,
     val exerciseId: Long,
-    val orderIndex: Int
+    val orderIndex: Int,
+    val isDropset: Boolean = false,
+    val startingWeight: Double = 0.0,
+    val dropWeightDecrease: Double = 0.0
 )

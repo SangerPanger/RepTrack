@@ -100,40 +100,89 @@ class WorkoutSessionViewModel(
         }
     }
 
-    fun addExercise(name: String) {
+    fun addExercise(name: String, isDropset: Boolean = false, initialWeight: Double = 0.0, dropDecrease: Double = 0.0) {
         viewModelScope.launch {
             val exercise = exerciseRepository.getOrCreateExercise(name)
-            addExerciseToWorkout(exercise.id)
+            val workoutExerciseId = addExerciseToWorkout(exercise.id, isDropset, initialWeight, dropDecrease)
+            if (initialWeight > 0 || isDropset) {
+                workoutRepository.addSet(
+                    workoutExerciseId = workoutExerciseId,
+                    setNumber = 1,
+                    reps = 10,
+                    weight = initialWeight
+                )
+            }
             _hasChanges.value = true
         }
     }
 
-    fun addExerciseById(exerciseId: Long) {
+    fun addExerciseById(exerciseId: Long, isDropset: Boolean = false, initialWeight: Double = 0.0, dropDecrease: Double = 0.0) {
         viewModelScope.launch {
-            addExerciseToWorkout(exerciseId)
+            val workoutExerciseId = addExerciseToWorkout(exerciseId, isDropset, initialWeight, dropDecrease)
+            if (initialWeight > 0 || isDropset) {
+                workoutRepository.addSet(
+                    workoutExerciseId = workoutExerciseId,
+                    setNumber = 1,
+                    reps = 10,
+                    weight = initialWeight
+                )
+            }
             _hasChanges.value = true
         }
     }
 
-    private suspend fun addExerciseToWorkout(exerciseId: Long) {
-        workoutRepository.addExerciseToWorkout(
+    private suspend fun addExerciseToWorkout(exerciseId: Long, isDropset: Boolean = false, startingWeight: Double = 0.0, dropWeightDecrease: Double = 0.0): Long {
+        return workoutRepository.addExerciseToWorkout(
             workoutId = workoutId,
             exerciseId = exerciseId,
-            orderIndex = _workoutExercises.value.size
+            orderIndex = _workoutExercises.value.size,
+            isDropset = isDropset,
+            startingWeight = startingWeight,
+            dropWeightDecrease = dropWeightDecrease
         )
     }
 
-    fun addSet(workoutExerciseId: Long) {
+    fun addDrop(workoutExerciseId: Long) {
         viewModelScope.launch {
-            val currentSets = _workoutExercises.value.find { it.workoutExercise.id == workoutExerciseId }?.sets ?: emptyList()
+            val exerciseWithSets = _workoutExercises.value.find { it.workoutExercise.id == workoutExerciseId } ?: return@launch
+            val currentSets = exerciseWithSets.sets
             val nextSetNumber = currentSets.size + 1
             val lastSet = currentSets.lastOrNull()
-            
+
+            val weight = if (lastSet != null) {
+                (lastSet.weight - exerciseWithSets.workoutExercise.dropWeightDecrease).coerceAtLeast(0.0)
+            } else {
+                0.0
+            }
+
             workoutRepository.addSet(
                 workoutExerciseId = workoutExerciseId,
                 setNumber = nextSetNumber,
                 reps = lastSet?.reps ?: 10,
-                weight = lastSet?.weight ?: 0.0
+                weight = weight
+            )
+            _hasChanges.value = true
+        }
+    }
+
+    fun addSet(workoutExerciseId: Long) {
+        viewModelScope.launch {
+            val exerciseWithSets = _workoutExercises.value.find { it.workoutExercise.id == workoutExerciseId } ?: return@launch
+            val currentSets = exerciseWithSets.sets
+            val nextSetNumber = currentSets.size + 1
+            val lastSet = currentSets.lastOrNull()
+
+            val weight = if (exerciseWithSets.workoutExercise.isDropset) {
+                exerciseWithSets.workoutExercise.startingWeight
+            } else {
+                lastSet?.weight ?: 0.0
+            }
+
+            workoutRepository.addSet(
+                workoutExerciseId = workoutExerciseId,
+                setNumber = nextSetNumber,
+                reps = lastSet?.reps ?: 10,
+                weight = weight
             )
             _hasChanges.value = true
         }
@@ -171,6 +220,13 @@ class WorkoutSessionViewModel(
                 set
             }
             workoutRepository.updateSet(updatedSet)
+            _hasChanges.value = true
+        }
+    }
+
+    fun deleteExercise(workoutExerciseId: Long) {
+        viewModelScope.launch {
+            workoutRepository.deleteWorkoutExercise(workoutExerciseId)
             _hasChanges.value = true
         }
     }

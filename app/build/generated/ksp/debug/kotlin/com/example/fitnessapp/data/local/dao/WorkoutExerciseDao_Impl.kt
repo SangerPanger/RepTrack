@@ -1,6 +1,7 @@
 package com.example.fitnessapp.`data`.local.dao
 
 import androidx.collection.LongSparseArray
+import androidx.room.EntityDeleteOrUpdateAdapter
 import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
@@ -22,6 +23,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.MutableList
 import kotlin.collections.mutableListOf
@@ -37,18 +39,34 @@ public class WorkoutExerciseDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfWorkoutExerciseEntity: EntityInsertAdapter<WorkoutExerciseEntity>
+
+  private val __deleteAdapterOfWorkoutExerciseEntity:
+      EntityDeleteOrUpdateAdapter<WorkoutExerciseEntity>
   init {
     this.__db = __db
     this.__insertAdapterOfWorkoutExerciseEntity = object :
         EntityInsertAdapter<WorkoutExerciseEntity>() {
       protected override fun createQuery(): String =
-          "INSERT OR REPLACE INTO `workout_exercises` (`id`,`workoutId`,`exerciseId`,`orderIndex`) VALUES (nullif(?, 0),?,?,?)"
+          "INSERT OR REPLACE INTO `workout_exercises` (`id`,`workoutId`,`exerciseId`,`orderIndex`,`isDropset`,`startingWeight`,`dropWeightDecrease`) VALUES (nullif(?, 0),?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: WorkoutExerciseEntity) {
         statement.bindLong(1, entity.id)
         statement.bindLong(2, entity.workoutId)
         statement.bindLong(3, entity.exerciseId)
         statement.bindLong(4, entity.orderIndex.toLong())
+        val _tmp: Int = if (entity.isDropset) 1 else 0
+        statement.bindLong(5, _tmp.toLong())
+        statement.bindDouble(6, entity.startingWeight)
+        statement.bindDouble(7, entity.dropWeightDecrease)
+      }
+    }
+    this.__deleteAdapterOfWorkoutExerciseEntity = object :
+        EntityDeleteOrUpdateAdapter<WorkoutExerciseEntity>() {
+      protected override fun createQuery(): String =
+          "DELETE FROM `workout_exercises` WHERE `id` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: WorkoutExerciseEntity) {
+        statement.bindLong(1, entity.id)
       }
     }
   }
@@ -58,6 +76,11 @@ public class WorkoutExerciseDao_Impl(
     val _result: Long = __insertAdapterOfWorkoutExerciseEntity.insertAndReturnId(_connection,
         workoutExercise)
     _result
+  }
+
+  public override suspend fun deleteWorkoutExercise(workoutExercise: WorkoutExerciseEntity): Unit =
+      performSuspending(__db, false, true) { _connection ->
+    __deleteAdapterOfWorkoutExerciseEntity.handle(_connection, workoutExercise)
   }
 
   public override fun getWorkoutExercisesWithSets(workoutId: Long):
@@ -73,6 +96,10 @@ public class WorkoutExerciseDao_Impl(
         val _cursorIndexOfWorkoutId: Int = getColumnIndexOrThrow(_stmt, "workoutId")
         val _cursorIndexOfExerciseId: Int = getColumnIndexOrThrow(_stmt, "exerciseId")
         val _cursorIndexOfOrderIndex: Int = getColumnIndexOrThrow(_stmt, "orderIndex")
+        val _cursorIndexOfIsDropset: Int = getColumnIndexOrThrow(_stmt, "isDropset")
+        val _cursorIndexOfStartingWeight: Int = getColumnIndexOrThrow(_stmt, "startingWeight")
+        val _cursorIndexOfDropWeightDecrease: Int = getColumnIndexOrThrow(_stmt,
+            "dropWeightDecrease")
         val _collectionExercise: LongSparseArray<ExerciseEntity?> =
             LongSparseArray<ExerciseEntity?>()
         val _collectionSets: LongSparseArray<MutableList<SetEntity>> =
@@ -104,8 +131,16 @@ public class WorkoutExerciseDao_Impl(
           _tmpExerciseId = _stmt.getLong(_cursorIndexOfExerciseId)
           val _tmpOrderIndex: Int
           _tmpOrderIndex = _stmt.getLong(_cursorIndexOfOrderIndex).toInt()
+          val _tmpIsDropset: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_cursorIndexOfIsDropset).toInt()
+          _tmpIsDropset = _tmp != 0
+          val _tmpStartingWeight: Double
+          _tmpStartingWeight = _stmt.getDouble(_cursorIndexOfStartingWeight)
+          val _tmpDropWeightDecrease: Double
+          _tmpDropWeightDecrease = _stmt.getDouble(_cursorIndexOfDropWeightDecrease)
           _tmpWorkoutExercise =
-              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex)
+              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex,_tmpIsDropset,_tmpStartingWeight,_tmpDropWeightDecrease)
           val _tmpExercise: ExerciseEntity?
           val _tmpKey_2: Long
           _tmpKey_2 = _stmt.getLong(_cursorIndexOfExerciseId)
@@ -139,6 +174,10 @@ public class WorkoutExerciseDao_Impl(
         val _cursorIndexOfWorkoutId: Int = getColumnIndexOrThrow(_stmt, "workoutId")
         val _cursorIndexOfExerciseId: Int = getColumnIndexOrThrow(_stmt, "exerciseId")
         val _cursorIndexOfOrderIndex: Int = getColumnIndexOrThrow(_stmt, "orderIndex")
+        val _cursorIndexOfIsDropset: Int = getColumnIndexOrThrow(_stmt, "isDropset")
+        val _cursorIndexOfStartingWeight: Int = getColumnIndexOrThrow(_stmt, "startingWeight")
+        val _cursorIndexOfDropWeightDecrease: Int = getColumnIndexOrThrow(_stmt,
+            "dropWeightDecrease")
         val _collectionExercise: LongSparseArray<ExerciseEntity?> =
             LongSparseArray<ExerciseEntity?>()
         val _collectionSets: LongSparseArray<MutableList<SetEntity>> =
@@ -170,8 +209,16 @@ public class WorkoutExerciseDao_Impl(
           _tmpExerciseId = _stmt.getLong(_cursorIndexOfExerciseId)
           val _tmpOrderIndex: Int
           _tmpOrderIndex = _stmt.getLong(_cursorIndexOfOrderIndex).toInt()
+          val _tmpIsDropset: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_cursorIndexOfIsDropset).toInt()
+          _tmpIsDropset = _tmp != 0
+          val _tmpStartingWeight: Double
+          _tmpStartingWeight = _stmt.getDouble(_cursorIndexOfStartingWeight)
+          val _tmpDropWeightDecrease: Double
+          _tmpDropWeightDecrease = _stmt.getDouble(_cursorIndexOfDropWeightDecrease)
           _tmpWorkoutExercise =
-              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex)
+              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex,_tmpIsDropset,_tmpStartingWeight,_tmpDropWeightDecrease)
           val _tmpExercise: ExerciseEntity?
           val _tmpKey_2: Long
           _tmpKey_2 = _stmt.getLong(_cursorIndexOfExerciseId)
@@ -205,6 +252,10 @@ public class WorkoutExerciseDao_Impl(
         val _cursorIndexOfWorkoutId: Int = getColumnIndexOrThrow(_stmt, "workoutId")
         val _cursorIndexOfExerciseId: Int = getColumnIndexOrThrow(_stmt, "exerciseId")
         val _cursorIndexOfOrderIndex: Int = getColumnIndexOrThrow(_stmt, "orderIndex")
+        val _cursorIndexOfIsDropset: Int = getColumnIndexOrThrow(_stmt, "isDropset")
+        val _cursorIndexOfStartingWeight: Int = getColumnIndexOrThrow(_stmt, "startingWeight")
+        val _cursorIndexOfDropWeightDecrease: Int = getColumnIndexOrThrow(_stmt,
+            "dropWeightDecrease")
         val _result: MutableList<WorkoutExerciseEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: WorkoutExerciseEntity
@@ -216,10 +267,33 @@ public class WorkoutExerciseDao_Impl(
           _tmpExerciseId = _stmt.getLong(_cursorIndexOfExerciseId)
           val _tmpOrderIndex: Int
           _tmpOrderIndex = _stmt.getLong(_cursorIndexOfOrderIndex).toInt()
-          _item = WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex)
+          val _tmpIsDropset: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_cursorIndexOfIsDropset).toInt()
+          _tmpIsDropset = _tmp != 0
+          val _tmpStartingWeight: Double
+          _tmpStartingWeight = _stmt.getDouble(_cursorIndexOfStartingWeight)
+          val _tmpDropWeightDecrease: Double
+          _tmpDropWeightDecrease = _stmt.getDouble(_cursorIndexOfDropWeightDecrease)
+          _item =
+              WorkoutExerciseEntity(_tmpId,_tmpWorkoutId,_tmpExerciseId,_tmpOrderIndex,_tmpIsDropset,_tmpStartingWeight,_tmpDropWeightDecrease)
           _result.add(_item)
         }
         _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun deleteWorkoutExerciseById(workoutExerciseId: Long) {
+    val _sql: String = "DELETE FROM workout_exercises WHERE id = ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, workoutExerciseId)
+        _stmt.step()
       } finally {
         _stmt.close()
       }
