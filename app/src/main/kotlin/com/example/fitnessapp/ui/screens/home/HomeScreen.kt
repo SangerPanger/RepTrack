@@ -93,7 +93,7 @@ fun HomeScreen(
                 val workout = latestWorkout!!
                 val dateStr = SimpleDateFormat("MMM d, HH:mm", Locale.getDefault()).format(Date(workout.startedAt))
                 val duration = if (workout.finishedAt != null) {
-                    val diff = (workout.finishedAt - workout.startedAt) / (1000 * 60)
+                    val diff = workout.manualDurationMinutes ?: (((workout.finishedAt - workout.startedAt) - workout.durationOffsetMs) / (1000 * 60))
                     " ($diff min)"
                 } else ""
                 

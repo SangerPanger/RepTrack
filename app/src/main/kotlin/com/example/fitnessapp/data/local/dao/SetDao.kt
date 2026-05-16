@@ -31,4 +31,7 @@ interface SetDao {
 
     @Query("SELECT * FROM sets s JOIN workout_exercises we ON s.workoutExerciseId = we.id WHERE we.exerciseId = :exerciseId ORDER BY s.id DESC")
     fun getAllSetsForExercise(exerciseId: Long): Flow<List<SetEntity>>
+
+    @Query("SELECT s.* FROM sets s JOIN workout_exercises we ON s.workoutExerciseId = we.id WHERE we.workoutId = :workoutId")
+    suspend fun getSetsForWorkout(workoutId: Long): List<SetEntity>
 }

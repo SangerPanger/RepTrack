@@ -2,6 +2,7 @@ package com.example.fitnessapp.data.local.dao
 
 import androidx.room.*
 import com.example.fitnessapp.data.local.entity.WorkoutEntity
+import com.example.fitnessapp.data.local.entity.WorkoutWithExercises
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,6 +15,10 @@ interface WorkoutDao {
 
     @Delete
     suspend fun deleteWorkout(workout: WorkoutEntity)
+
+    @Transaction
+    @Query("SELECT * FROM workouts ORDER BY startedAt DESC")
+    fun getAllWorkoutsWithExercises(): Flow<List<WorkoutWithExercises>>
 
     @Query("SELECT * FROM workouts ORDER BY startedAt DESC")
     fun getAllWorkouts(): Flow<List<WorkoutEntity>>

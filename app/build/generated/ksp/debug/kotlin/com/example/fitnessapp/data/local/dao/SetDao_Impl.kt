@@ -315,6 +315,67 @@ public class SetDao_Impl(
     }
   }
 
+  public override suspend fun getSetsForWorkout(workoutId: Long): List<SetEntity> {
+    val _sql: String =
+        "SELECT s.* FROM sets s JOIN workout_exercises we ON s.workoutExerciseId = we.id WHERE we.workoutId = ?"
+    return performSuspending(__db, true, false) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, workoutId)
+        val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
+        val _cursorIndexOfWorkoutExerciseId: Int = getColumnIndexOrThrow(_stmt, "workoutExerciseId")
+        val _cursorIndexOfSetNumber: Int = getColumnIndexOrThrow(_stmt, "setNumber")
+        val _cursorIndexOfReps: Int = getColumnIndexOrThrow(_stmt, "reps")
+        val _cursorIndexOfWeight: Int = getColumnIndexOrThrow(_stmt, "weight")
+        val _cursorIndexOfRpe: Int = getColumnIndexOrThrow(_stmt, "rpe")
+        val _cursorIndexOfIsDrop: Int = getColumnIndexOrThrow(_stmt, "isDrop")
+        val _cursorIndexOfCompletedAt: Int = getColumnIndexOrThrow(_stmt, "completedAt")
+        val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
+        val _result: MutableList<SetEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: SetEntity
+          val _tmpId: Long
+          _tmpId = _stmt.getLong(_cursorIndexOfId)
+          val _tmpWorkoutExerciseId: Long
+          _tmpWorkoutExerciseId = _stmt.getLong(_cursorIndexOfWorkoutExerciseId)
+          val _tmpSetNumber: Int
+          _tmpSetNumber = _stmt.getLong(_cursorIndexOfSetNumber).toInt()
+          val _tmpReps: Int
+          _tmpReps = _stmt.getLong(_cursorIndexOfReps).toInt()
+          val _tmpWeight: Double
+          _tmpWeight = _stmt.getDouble(_cursorIndexOfWeight)
+          val _tmpRpe: Int?
+          if (_stmt.isNull(_cursorIndexOfRpe)) {
+            _tmpRpe = null
+          } else {
+            _tmpRpe = _stmt.getLong(_cursorIndexOfRpe).toInt()
+          }
+          val _tmpIsDrop: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_cursorIndexOfIsDrop).toInt()
+          _tmpIsDrop = _tmp != 0
+          val _tmpCompletedAt: Long?
+          if (_stmt.isNull(_cursorIndexOfCompletedAt)) {
+            _tmpCompletedAt = null
+          } else {
+            _tmpCompletedAt = _stmt.getLong(_cursorIndexOfCompletedAt)
+          }
+          val _tmpCompleted: Boolean
+          val _tmp_1: Int
+          _tmp_1 = _stmt.getLong(_cursorIndexOfCompleted).toInt()
+          _tmpCompleted = _tmp_1 != 0
+          _item =
+              SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpIsDrop,_tmpCompletedAt,_tmpCompleted)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public companion object {
     public fun getRequiredConverters(): List<KClass<*>> = emptyList()
   }

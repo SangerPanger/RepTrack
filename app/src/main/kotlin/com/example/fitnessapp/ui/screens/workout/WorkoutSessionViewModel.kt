@@ -64,7 +64,7 @@ class WorkoutSessionViewModel(
                     val now = System.currentTimeMillis()
                     
                     // Workout timer
-                    val elapsedMs = now - currentWorkout.startedAt
+                    val elapsedMs = (now - currentWorkout.startedAt) - currentWorkout.durationOffsetMs
                     val totalSeconds = (elapsedMs / 1000).coerceAtLeast(0)
                     val seconds = totalSeconds % 60
                     val minutes = (totalSeconds / 60) % 60
@@ -86,7 +86,7 @@ class WorkoutSessionViewModel(
                             
                             val referenceTime = lastCompletedSet?.completedAt ?: currentWorkout.startedAt
                             
-                            val restMs = now - referenceTime
+                            val restMs = (now - referenceTime) - currentWorkout.durationOffsetMs
                             val restSeconds = (restMs / 1000).coerceAtLeast(0)
                             val rSec = restSeconds % 60
                             val rMin = restSeconds / 60
@@ -216,15 +216,17 @@ class WorkoutSessionViewModel(
 
     fun updateSet(set: SetEntity) {
         viewModelScope.launch {
-            val updatedSet = if (set.completed && set.completedAt == null) {
-                set.copy(completedAt = System.currentTimeMillis())
-            } else if (!set.completed) {
-                set.copy(completedAt = null)
-            } else {
-                set
+            _workout.value?.let { currentWorkout ->
+                val updatedSet = if (set.completed && set.completedAt == null) {
+                    set.copy(completedAt = System.currentTimeMillis() - currentWorkout.durationOffsetMs)
+                } else if (!set.completed) {
+                    set.copy(completedAt = null)
+                } else {
+                    set
+                }
+                workoutRepository.updateSet(updatedSet)
+                _hasChanges.value = true
             }
-            workoutRepository.updateSet(updatedSet)
-            _hasChanges.value = true
         }
     }
 
@@ -254,21 +256,59 @@ class WorkoutSessionViewModel(
                 val currentCalendar = Calendar.getInstance().apply { timeInMillis = currentWorkout.startedAt }
                 val newCalendar = Calendar.getInstance().apply { timeInMillis = timestamp }
                 
-                // Preserve current time
-                newCalendar.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY))
-                newCalendar.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
-                newCalendar.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND))
-                newCalendar.set(Calendar.MILLISECOND, currentCalendar.get(Calendar.MILLISECOND))
+                // Use a neutral calendar to calculate the start of the day for both
+                // Actually, just extract Y, M, D from timestamp and H, M, S from currentWorkout.startedAt
+                
+                val targetCalendar = Calendar.getInstance().apply {
+                    timeInMillis = timestamp
+                    set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY))
+                    set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                    set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND))
+                    set(Calendar.MILLISECOND, currentCalendar.get(Calendar.MILLISECOND))
+                }
 
-                val newStartedAt = newCalendar.timeInMillis
+                val newStartedAt = targetCalendar.timeInMillis
+                val delta = newStartedAt - currentWorkout.startedAt
+
                 val updatedWorkout = if (currentWorkout.finishedAt != null) {
-                    val duration = currentWorkout.finishedAt - currentWorkout.startedAt
-                    currentWorkout.copy(startedAt = newStartedAt, finishedAt = newStartedAt + duration)
+                    val finishCalendar = Calendar.getInstance().apply { timeInMillis = currentWorkout.finishedAt }
+                    val newFinishedCalendar = Calendar.getInstance().apply {
+                        timeInMillis = timestamp
+                        set(Calendar.HOUR_OF_DAY, finishCalendar.get(Calendar.HOUR_OF_DAY))
+                        set(Calendar.MINUTE, finishCalendar.get(Calendar.MINUTE))
+                        set(Calendar.SECOND, finishCalendar.get(Calendar.SECOND))
+                        set(Calendar.MILLISECOND, finishCalendar.get(Calendar.MILLISECOND))
+                    }
+                    
+                    // If the workout crossed midnight, newFinishedCalendar should be adjusted
+                    var newFinishedAt = newFinishedCalendar.timeInMillis
+                    val originalDuration = currentWorkout.finishedAt - currentWorkout.startedAt
+                    if (originalDuration >= 0 && newFinishedAt < newStartedAt) {
+                        newFinishedCalendar.add(Calendar.DAY_OF_YEAR, 1)
+                        newFinishedAt = newFinishedCalendar.timeInMillis
+                    }
+                    
+                    currentWorkout.copy(
+                        startedAt = newStartedAt, 
+                        finishedAt = newFinishedAt
+                    )
                 } else {
-                    currentWorkout.copy(startedAt = newStartedAt)
+                    currentWorkout.copy(
+                        startedAt = newStartedAt,
+                        durationOffsetMs = currentWorkout.durationOffsetMs - delta
+                    )
                 }
 
                 workoutRepository.updateWorkout(updatedWorkout)
+                
+                // Shift all sets' completedAt by the same delta
+                val sets = workoutRepository.getSetsForWorkout(workoutId)
+                sets.forEach { set ->
+                    if (set.completedAt != null) {
+                        workoutRepository.updateSet(set.copy(completedAt = set.completedAt + delta))
+                    }
+                }
+                
                 _hasChanges.value = true
             }
         }
@@ -287,7 +327,10 @@ class WorkoutSessionViewModel(
         viewModelScope.launch {
             _workout.value?.let { currentWorkout ->
                 val newFinishedAt = currentWorkout.startedAt + (durationMinutes * 60 * 1000)
-                workoutRepository.updateWorkout(currentWorkout.copy(finishedAt = newFinishedAt))
+                workoutRepository.updateWorkout(currentWorkout.copy(
+                    finishedAt = newFinishedAt,
+                    manualDurationMinutes = durationMinutes
+                ))
                 _hasChanges.value = true
             }
         }

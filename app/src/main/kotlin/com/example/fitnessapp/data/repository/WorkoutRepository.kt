@@ -12,6 +12,7 @@ class WorkoutRepository(
     private val setDao: SetDao
 ) {
     val allWorkouts: Flow<List<WorkoutEntity>> = workoutDao.getAllWorkouts()
+    val allWorkoutsWithExercises: Flow<List<WorkoutWithExercises>> = workoutDao.getAllWorkoutsWithExercises()
     val latestWorkout: Flow<WorkoutEntity?> = workoutDao.getLatestWorkout()
     val workoutCount: Flow<Int> = workoutDao.getWorkoutCount()
     val uniqueWorkoutTitles: Flow<List<String>> = workoutDao.getUniqueWorkoutTitles()
@@ -55,7 +56,13 @@ class WorkoutRepository(
     suspend fun finishWorkout(workoutId: Long, notes: String?) {
         val workout = workoutDao.getWorkoutById(workoutId)
         workout?.let {
-            workoutDao.updateWorkout(it.copy(finishedAt = it.finishedAt ?: System.currentTimeMillis(), notes = notes))
+            val finishedAt = it.finishedAt ?: (System.currentTimeMillis() - it.durationOffsetMs)
+            val duration = ((finishedAt - it.startedAt)) / (1000 * 60)
+            workoutDao.updateWorkout(it.copy(
+                finishedAt = finishedAt, 
+                notes = notes,
+                manualDurationMinutes = duration
+            ))
         }
     }
 
@@ -118,5 +125,9 @@ class WorkoutRepository(
 
     suspend fun deleteWorkoutExercise(workoutExerciseId: Long) {
         workoutExerciseDao.deleteWorkoutExerciseById(workoutExerciseId)
+    }
+
+    suspend fun getSetsForWorkout(workoutId: Long): List<SetEntity> {
+        return setDao.getSetsForWorkout(workoutId)
     }
 }

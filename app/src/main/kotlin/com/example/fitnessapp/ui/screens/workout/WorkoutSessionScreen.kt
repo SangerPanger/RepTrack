@@ -172,7 +172,7 @@ fun WorkoutSessionScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    val durationMinutes = (it.finishedAt - it.startedAt) / (1000 * 60)
+                                    val durationMinutes = it.manualDurationMinutes ?: (((it.finishedAt - it.startedAt) - it.durationOffsetMs) / (1000 * 60))
                                     Text(
                                         text = "Duration: $durationMinutes min",
                                         style = MaterialTheme.typography.bodyMedium,
@@ -214,29 +214,40 @@ fun WorkoutSessionScreen(
             items(workoutExercises) { exerciseWithSets ->
                 NeonCard {
                     Column {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = (exerciseWithSets.exercise.name + (if (exerciseWithSets.workoutExercise.isDropset) " (DS)" else "")).uppercase(),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.weight(1f)
-                            )
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Text(
-                                    text = "Add-set",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.primary
+                                    text = (exerciseWithSets.exercise.name + (if (exerciseWithSets.workoutExercise.isDropset) " (DS)" else "")).uppercase(),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.weight(1f)
                                 )
-                                IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
-                                    Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "Add-set",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    IconButton(onClick = { viewModel.addSet(exerciseWithSets.workoutExercise.id) }) {
+                                        Icon(Icons.Default.Add, contentDescription = "Add Set", tint = MaterialTheme.colorScheme.primary)
+                                    }
+                                    IconButton(onClick = { viewModel.deleteExercise(exerciseWithSets.workoutExercise.id) }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Remove Exercise", tint = MaterialTheme.colorScheme.error)
+                                    }
                                 }
-                                IconButton(onClick = { viewModel.deleteExercise(exerciseWithSets.workoutExercise.id) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Remove Exercise", tint = MaterialTheme.colorScheme.error)
-                                }
+                            }
+                            val exerciseVolume = exerciseWithSets.sets.filter { it.completed }.sumOf { it.reps * it.weight }
+                            if (exerciseVolume > 0) {
+                                Text(
+                                    text = "Total Volume: ${String.format("%.1f", exerciseVolume)} kg",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                    modifier = Modifier.padding(bottom = 4.dp)
+                                )
                             }
                         }
                         

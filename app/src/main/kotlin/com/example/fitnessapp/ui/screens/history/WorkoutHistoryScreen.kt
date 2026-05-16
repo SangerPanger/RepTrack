@@ -41,8 +41,11 @@ fun WorkoutHistoryScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(workouts) { workout ->
-                WorkoutHistoryItem(workout = workout, onClick = { onWorkoutClick(workout.id) })
+            items(workouts) { workoutWithExercises ->
+                WorkoutHistoryItem(
+                    workoutWithExercises = workoutWithExercises, 
+                    onClick = { onWorkoutClick(workoutWithExercises.workout.id) }
+                )
             }
             item {
                 Spacer(modifier = Modifier.height(80.dp))
@@ -53,14 +56,19 @@ fun WorkoutHistoryScreen(
 
 @Composable
 fun WorkoutHistoryItem(
-    workout: com.example.fitnessapp.data.local.entity.WorkoutEntity,
+    workoutWithExercises: com.example.fitnessapp.data.local.entity.WorkoutWithExercises,
     onClick: () -> Unit
 ) {
+    val workout = workoutWithExercises.workout
     val dateStr = SimpleDateFormat("MMM d, yyyy HH:mm", Locale.getDefault()).format(Date(workout.startedAt))
     val duration = if (workout.finishedAt != null) {
-        val diff = (workout.finishedAt - workout.startedAt) / (1000 * 60)
+        val diff = workout.manualDurationMinutes ?: (((workout.finishedAt - workout.startedAt) - workout.durationOffsetMs) / (1000 * 60))
         " ($diff min)"
     } else " (In Progress)"
+
+    val totalVolume = workoutWithExercises.workoutExercises.sumOf { exercise ->
+        exercise.sets.filter { it.completed }.sumOf { it.reps * it.weight }
+    }
 
     NeonCard(
         modifier = Modifier
@@ -68,12 +76,25 @@ fun WorkoutHistoryItem(
             .clickable { onClick() }
     ) {
         Column {
-            Text(
-                text = "${workout.title.uppercase()}",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = NeonCyan
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "${workout.title.uppercase()}",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = NeonCyan
+                )
+                if (totalVolume > 0) {
+                    Text(
+                        text = "${String.format("%.1f", totalVolume)} kg",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = NeonCyan
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "$dateStr$duration",

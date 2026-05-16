@@ -10,5 +10,7 @@ data class WorkoutEntity(
     val title: String,
     val startedAt: Long,
     val finishedAt: Long? = null,
-    val notes: String? = null
+    val notes: String? = null,
+    val manualDurationMinutes: Long? = null,
+    val durationOffsetMs: Long = 0
 )
