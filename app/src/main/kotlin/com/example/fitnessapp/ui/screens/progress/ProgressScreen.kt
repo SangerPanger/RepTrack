@@ -1,14 +1,13 @@
 package com.example.fitnessapp.ui.screens.progress
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -19,50 +18,150 @@ import com.example.fitnessapp.ui.components.StatCard
 import com.example.fitnessapp.ui.theme.NeonCyan
 import com.example.fitnessapp.ui.theme.SuccessGreen
 import com.example.fitnessapp.ui.theme.NeonPurple
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Composable
 fun ProgressScreen(viewModel: ProgressViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val foodProgress by viewModel.foodProgress.collectAsState()
+    
+    var isFoodLogView by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .draggable(
+                state = rememberDraggableState { delta ->
+                    if (delta < -20 && !isFoodLogView) isFoodLogView = true
+                    if (delta > 20 && isFoodLogView) isFoodLogView = false
+                },
+                orientation = Orientation.Horizontal
+            )
     ) {
-        Text(
-            text = "PERFORMANCE",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.ExtraBold,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        when (val state = uiState) {
-            is ProgressUiState.Loading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = NeonCyan)
-                }
-            }
-            is ProgressUiState.Empty -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        text = "No workout data yet.\nStart a workout to track progress!",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(16.dp),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        text = "PROGRESS",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (isFoodLogView) "(Food-log)" else "(Workouts)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
                 }
+                Text(
+                    text = if (isFoodLogView) "Swipe -> for Workouts" else "Swipe <- for Food-log",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
             }
-            is ProgressUiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+
+            if (!isFoodLogView) {
+                // Workout Progress View
+                when (val state = uiState) {
+                    is ProgressUiState.Loading -> {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator(color = NeonCyan)
+                        }
+                    }
+                    is ProgressUiState.Empty -> {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text(
+                                text = "No workout data yet.\nStart a workout to track progress!",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(16.dp),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                    }
+                    is ProgressUiState.Success -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(state.exercises) { progress ->
+                                ExerciseProgressCard(progress)
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Food Progress View
+                FoodProgressView(foodProgress)
+            }
+        }
+    }
+}
+
+@Composable
+fun FoodProgressView(foodProgress: com.example.fitnessapp.ui.screens.progress.FoodProgress?) {
+    if (foodProgress == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(
+                "No food logs or profile found.\nEnter your profile in Settings and log food to see progress.",
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            item {
+                NeonCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = "ESTIMATED WEIGHT CHANGE",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = NeonCyan
+                        )
+                        val change = foodProgress.estimatedWeightChange
+                        val direction = if (change >= 0) "Gain" else "Loss"
+                        Text(
+                            text = "${String.format("%.2f", abs(change))} kg $direction",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = if (change >= 0) NeonPurple else SuccessGreen
+                        )
+                        Text(
+                            text = "Based on ${foodProgress.totalDaysTracked} days of tracking.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+            }
+            
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(state.exercises) { progress ->
-                        ExerciseProgressCard(progress)
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(80.dp))
-                    }
+                    StatCard(
+                        label = "AVG CALORIES",
+                        value = "${foodProgress.averageDailyCalories.roundToInt()} kcal",
+                        modifier = Modifier.weight(1f)
+                    )
+                    StatCard(
+                        label = "TDEE (Est.)",
+                        value = "${foodProgress.tdee.roundToInt()} kcal",
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }

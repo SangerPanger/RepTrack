@@ -3,6 +3,7 @@ package com.example.fitnessapp
 import android.app.Application
 import com.example.fitnessapp.data.local.database.AppDatabase
 import com.example.fitnessapp.data.repository.ExerciseRepository
+import com.example.fitnessapp.data.repository.FoodRepository
 import com.example.fitnessapp.data.repository.ProgressRepository
 import com.example.fitnessapp.data.repository.WorkoutRepository
 
@@ -13,4 +14,5 @@ class FitnessApp : Application() {
     }
     val exerciseRepository by lazy { ExerciseRepository(database.exerciseDao()) }
     val progressRepository by lazy { ProgressRepository(database.setDao()) }
+    val foodRepository by lazy { FoodRepository(database.userProfileDao(), database.foodLogDao()) }
 }

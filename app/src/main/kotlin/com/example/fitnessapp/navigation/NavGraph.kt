@@ -53,7 +53,7 @@ fun NavGraph(
             composable("home") {
                 val viewModel: HomeViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return HomeViewModel(app.workoutRepository) as T
+                        return HomeViewModel(app.workoutRepository, app.foodRepository) as T
                     }
                 })
                 HomeScreen(
@@ -91,7 +91,7 @@ fun NavGraph(
             composable("history") {
                 val viewModel: WorkoutHistoryViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return WorkoutHistoryViewModel(app.workoutRepository) as T
+                        return WorkoutHistoryViewModel(app.workoutRepository, app.foodRepository) as T
                     }
                 })
                 WorkoutHistoryScreen(
@@ -105,14 +105,18 @@ fun NavGraph(
             composable("progress") {
                 val viewModel: ProgressViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ProgressViewModel(app.progressRepository, app.exerciseRepository) as T
+                        return ProgressViewModel(app.progressRepository, app.exerciseRepository, app.foodRepository) as T
                     }
                 })
                 ProgressScreen(viewModel = viewModel)
             }
-
+            
             composable("settings") {
-                val viewModel: SettingsViewModel = viewModel()
+                val viewModel: SettingsViewModel = viewModel(factory = object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return SettingsViewModel(app.foodRepository) as T
+                    }
+                })
                 SettingsScreen(viewModel = viewModel)
             }
         }

@@ -11,8 +11,12 @@ import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import com.example.fitnessapp.`data`.local.dao.ExerciseDao
 import com.example.fitnessapp.`data`.local.dao.ExerciseDao_Impl
+import com.example.fitnessapp.`data`.local.dao.FoodLogDao
+import com.example.fitnessapp.`data`.local.dao.FoodLogDao_Impl
 import com.example.fitnessapp.`data`.local.dao.SetDao
 import com.example.fitnessapp.`data`.local.dao.SetDao_Impl
+import com.example.fitnessapp.`data`.local.dao.UserProfileDao
+import com.example.fitnessapp.`data`.local.dao.UserProfileDao_Impl
 import com.example.fitnessapp.`data`.local.dao.WorkoutDao
 import com.example.fitnessapp.`data`.local.dao.WorkoutDao_Impl
 import com.example.fitnessapp.`data`.local.dao.WorkoutExerciseDao
@@ -56,9 +60,19 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
 
+  private val _userProfileDao: Lazy<UserProfileDao> = lazy {
+    UserProfileDao_Impl(this)
+  }
+
+
+  private val _foodLogDao: Lazy<FoodLogDao> = lazy {
+    FoodLogDao_Impl(this)
+  }
+
+
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(6,
-        "83ae753b730c3371a7c065d5400ef889", "1653c198f4f6898cde462f0bbaf016d9") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(7,
+        "df8c3cde4a1d3136c9c115d2e0942ac6", "95e369542cc232cc65309fa63cd3fad2") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `workouts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `finishedAt` INTEGER, `notes` TEXT, `manualDurationMinutes` INTEGER, `durationOffsetMs` INTEGER NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `muscleGroup` TEXT)")
@@ -67,8 +81,10 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_exercises_exerciseId` ON `workout_exercises` (`exerciseId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `sets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutExerciseId` INTEGER NOT NULL, `setNumber` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `rpe` INTEGER, `isDrop` INTEGER NOT NULL, `completedAt` INTEGER, `completed` INTEGER NOT NULL, FOREIGN KEY(`workoutExerciseId`) REFERENCES `workout_exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_sets_workoutExerciseId` ON `sets` (`workoutExerciseId`)")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `user_profile` (`id` INTEGER NOT NULL, `age` INTEGER NOT NULL, `gender` TEXT NOT NULL, `height` REAL NOT NULL, `currentWeight` REAL NOT NULL, `targetWeight` REAL NOT NULL, PRIMARY KEY(`id`))")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `food_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `carbs` REAL NOT NULL, `fats` REAL NOT NULL, `protein` REAL NOT NULL, `calories` REAL NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83ae753b730c3371a7c065d5400ef889')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df8c3cde4a1d3136c9c115d2e0942ac6')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -76,6 +92,8 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("DROP TABLE IF EXISTS `exercises`")
         connection.execSQL("DROP TABLE IF EXISTS `workout_exercises`")
         connection.execSQL("DROP TABLE IF EXISTS `sets`")
+        connection.execSQL("DROP TABLE IF EXISTS `user_profile`")
+        connection.execSQL("DROP TABLE IF EXISTS `food_logs`")
       }
 
       public override fun onCreate(connection: SQLiteConnection) {
@@ -218,6 +236,60 @@ public class AppDatabase_Impl : AppDatabase() {
               | Found:
               |""".trimMargin() + _existingSets)
         }
+        val _columnsUserProfile: MutableMap<String, TableInfo.Column> = mutableMapOf()
+        _columnsUserProfile.put("id", TableInfo.Column("id", "INTEGER", true, 1, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("age", TableInfo.Column("age", "INTEGER", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("gender", TableInfo.Column("gender", "TEXT", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("height", TableInfo.Column("height", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("currentWeight", TableInfo.Column("currentWeight", "REAL", true, 0,
+            null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("targetWeight", TableInfo.Column("targetWeight", "REAL", true, 0,
+            null, TableInfo.CREATED_FROM_ENTITY))
+        val _foreignKeysUserProfile: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
+        val _indicesUserProfile: MutableSet<TableInfo.Index> = mutableSetOf()
+        val _infoUserProfile: TableInfo = TableInfo("user_profile", _columnsUserProfile,
+            _foreignKeysUserProfile, _indicesUserProfile)
+        val _existingUserProfile: TableInfo = read(connection, "user_profile")
+        if (!_infoUserProfile.equals(_existingUserProfile)) {
+          return RoomOpenDelegate.ValidationResult(false, """
+              |user_profile(com.example.fitnessapp.data.local.entity.UserProfileEntity).
+              | Expected:
+              |""".trimMargin() + _infoUserProfile + """
+              |
+              | Found:
+              |""".trimMargin() + _existingUserProfile)
+        }
+        val _columnsFoodLogs: MutableMap<String, TableInfo.Column> = mutableMapOf()
+        _columnsFoodLogs.put("id", TableInfo.Column("id", "INTEGER", true, 1, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsFoodLogs.put("date", TableInfo.Column("date", "INTEGER", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsFoodLogs.put("carbs", TableInfo.Column("carbs", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsFoodLogs.put("fats", TableInfo.Column("fats", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsFoodLogs.put("protein", TableInfo.Column("protein", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsFoodLogs.put("calories", TableInfo.Column("calories", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        val _foreignKeysFoodLogs: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
+        val _indicesFoodLogs: MutableSet<TableInfo.Index> = mutableSetOf()
+        val _infoFoodLogs: TableInfo = TableInfo("food_logs", _columnsFoodLogs,
+            _foreignKeysFoodLogs, _indicesFoodLogs)
+        val _existingFoodLogs: TableInfo = read(connection, "food_logs")
+        if (!_infoFoodLogs.equals(_existingFoodLogs)) {
+          return RoomOpenDelegate.ValidationResult(false, """
+              |food_logs(com.example.fitnessapp.data.local.entity.FoodLogEntity).
+              | Expected:
+              |""".trimMargin() + _infoFoodLogs + """
+              |
+              | Found:
+              |""".trimMargin() + _existingFoodLogs)
+        }
         return RoomOpenDelegate.ValidationResult(true, null)
       }
     }
@@ -228,11 +300,12 @@ public class AppDatabase_Impl : AppDatabase() {
     val _shadowTablesMap: MutableMap<String, String> = mutableMapOf()
     val _viewTables: MutableMap<String, Set<String>> = mutableMapOf()
     return InvalidationTracker(this, _shadowTablesMap, _viewTables, "workouts", "exercises",
-        "workout_exercises", "sets")
+        "workout_exercises", "sets", "user_profile", "food_logs")
   }
 
   public override fun clearAllTables() {
-    super.performClear(true, "workouts", "exercises", "workout_exercises", "sets")
+    super.performClear(true, "workouts", "exercises", "workout_exercises", "sets", "user_profile",
+        "food_logs")
   }
 
   protected override fun getRequiredTypeConverterClasses():
@@ -243,6 +316,8 @@ public class AppDatabase_Impl : AppDatabase() {
     _typeConvertersMap.put(WorkoutExerciseDao::class,
         WorkoutExerciseDao_Impl.getRequiredConverters())
     _typeConvertersMap.put(SetDao::class, SetDao_Impl.getRequiredConverters())
+    _typeConvertersMap.put(UserProfileDao::class, UserProfileDao_Impl.getRequiredConverters())
+    _typeConvertersMap.put(FoodLogDao::class, FoodLogDao_Impl.getRequiredConverters())
     return _typeConvertersMap
   }
 
@@ -265,4 +340,8 @@ public class AppDatabase_Impl : AppDatabase() {
   public override fun workoutExerciseDao(): WorkoutExerciseDao = _workoutExerciseDao.value
 
   public override fun setDao(): SetDao = _setDao.value
+
+  public override fun userProfileDao(): UserProfileDao = _userProfileDao.value
+
+  public override fun foodLogDao(): FoodLogDao = _foodLogDao.value
 }

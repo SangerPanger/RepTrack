@@ -12,15 +12,19 @@ import com.example.fitnessapp.data.local.entity.ExerciseEntity
 import com.example.fitnessapp.data.local.entity.SetEntity
 import com.example.fitnessapp.data.local.entity.WorkoutEntity
 import com.example.fitnessapp.data.local.entity.WorkoutExerciseEntity
+import com.example.fitnessapp.data.local.entity.UserProfileEntity
+import com.example.fitnessapp.data.local.entity.FoodLogEntity
 
 @Database(
     entities = [
         WorkoutEntity::class,
         ExerciseEntity::class,
         WorkoutExerciseEntity::class,
-        SetEntity::class
+        SetEntity::class,
+        UserProfileEntity::class,
+        FoodLogEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -28,6 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
     abstract fun setDao(): SetDao
+    abstract fun userProfileDao(): com.example.fitnessapp.data.local.dao.UserProfileDao
+    abstract fun foodLogDao(): com.example.fitnessapp.data.local.dao.FoodLogDao
 
     companion object {
         @Volatile

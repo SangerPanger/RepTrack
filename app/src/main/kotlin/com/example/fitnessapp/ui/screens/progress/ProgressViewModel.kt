@@ -3,13 +3,17 @@ package com.example.fitnessapp.ui.screens.progress
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnessapp.data.local.entity.ExerciseEntity
+import com.example.fitnessapp.data.local.entity.FoodLogEntity
 import com.example.fitnessapp.data.local.entity.SetEntity
+import com.example.fitnessapp.data.local.entity.UserProfileEntity
 import com.example.fitnessapp.data.repository.ExerciseRepository
+import com.example.fitnessapp.data.repository.FoodRepository
 import com.example.fitnessapp.data.repository.ProgressRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 data class ProgressPoint(val date: Long, val value: Double)
@@ -41,13 +45,64 @@ data class ExerciseProgress(
     val projection: ProgressProjection? = null
 )
 
+data class FoodProgress(
+    val estimatedWeightChange: Double, // in kg
+    val averageDailyCalories: Double,
+    val tdee: Double,
+    val totalDaysTracked: Int
+)
+
 class ProgressViewModel(
     private val progressRepository: ProgressRepository,
-    private val exerciseRepository: ExerciseRepository
+    private val exerciseRepository: ExerciseRepository,
+    private val foodRepository: FoodRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ProgressUiState>(ProgressUiState.Loading)
     val uiState: StateFlow<ProgressUiState> = _uiState.asStateFlow()
+
+    val userProfile: StateFlow<UserProfileEntity?> = foodRepository.getUserProfile()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val foodLogs: StateFlow<List<FoodLogEntity>> = foodRepository.getAllFoodLogs()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val foodProgress: StateFlow<FoodProgress?> = combine(userProfile, foodLogs) { profile, logs ->
+        if (profile == null || logs.isEmpty()) return@combine null
+
+        val bmr = if (profile.gender.lowercase().startsWith("m")) {
+            10 * profile.currentWeight + 6.25 * profile.height - 5 * profile.age + 5
+        } else {
+            10 * profile.currentWeight + 6.25 * profile.height - 5 * profile.age - 161
+        }
+        val tdee = bmr * 1.2 // Assume sedentary
+
+        val dailyTotals = logs.groupBy {
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = it.date
+            cal.set(Calendar.HOUR_OF_DAY, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+            cal.timeInMillis
+        }.mapValues { (_, dayLogs) ->
+            dayLogs.sumOf { it.calories }
+        }
+
+        val totalCalories = dailyTotals.values.sum()
+        val daysTracked = dailyTotals.size
+        val avgCalories = if (daysTracked > 0) totalCalories / daysTracked else 0.0
+        
+        // Estimated weight change (kg) = (Total Calories - (TDEE * Days)) / 7700
+        val weightChange = (totalCalories - (tdee * daysTracked)) / 7700.0
+
+        FoodProgress(
+            estimatedWeightChange = weightChange,
+            averageDailyCalories = avgCalories,
+            tdee = tdee,
+            totalDaysTracked = daysTracked
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     init {
         loadProgress()
