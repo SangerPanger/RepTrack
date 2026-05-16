@@ -20,7 +20,7 @@ interface SetDao {
     fun getSetsForWorkoutExercise(workoutExerciseId: Long): Flow<List<SetEntity>>
 
     @Query("""
-        SELECT s.*, w.startedAt 
+        SELECT s.*, w.startedAt, we.startingWeight
         FROM sets s 
         JOIN workout_exercises we ON s.workoutExerciseId = we.id 
         JOIN workouts w ON we.workoutId = w.id

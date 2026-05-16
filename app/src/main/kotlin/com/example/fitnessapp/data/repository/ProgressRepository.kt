@@ -17,10 +17,28 @@ class ProgressRepository(private val setDao: SetDao) {
     }
 
     // Helper functions for calculations can be here or in a UseCase
-    fun calculateVolume(reps: Int, weight: Double): Double = reps * weight
+    fun calculateVolume(reps: Int, weight: Double, isDrop: Boolean = false, startingWeight: Double = 0.0): Double {
+        return if (isDrop && startingWeight > 0) {
+            val percentage = (weight / startingWeight) / 2.0
+            (percentage * startingWeight) * reps
+        } else if (isDrop) {
+            // Fallback if startingWeight is not provided
+            (weight / 2.0) * reps
+        } else {
+            reps * weight
+        }
+    }
     
-    fun calculateEstimated1RM(reps: Int, weight: Double): Double {
+    fun calculateEstimated1RM(reps: Int, weight: Double, isDrop: Boolean = false, startingWeight: Double = 0.0): Double {
         if (reps == 0) return 0.0
-        return weight * (1.0 + reps.toDouble() / 30.0)
+        val effectiveWeight = if (isDrop && startingWeight > 0) {
+            val percentage = (weight / startingWeight) / 2.0
+            percentage * startingWeight
+        } else if (isDrop) {
+            weight / 2.0
+        } else {
+            weight
+        }
+        return effectiveWeight * (1.0 + reps.toDouble() / 30.0)
     }
 }

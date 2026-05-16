@@ -66,8 +66,20 @@ fun WorkoutHistoryItem(
         " ($diff min)"
     } else " (In Progress)"
 
-    val totalVolume = workoutWithExercises.workoutExercises.sumOf { exercise ->
-        exercise.sets.filter { it.completed }.sumOf { it.reps * it.weight }
+    val totalVolume = workoutWithExercises.workoutExercises.sumOf { exerciseWithSets ->
+        exerciseWithSets.sets.filter { it.completed }.sumOf { set ->
+            if (set.isDrop) {
+                val weight = set.weight
+                val startingWeight = exerciseWithSets.workoutExercise.startingWeight
+                if (startingWeight > 0) {
+                    ((weight / startingWeight) / 2.0) * startingWeight * set.reps
+                } else {
+                    (weight / 2.0) * set.reps
+                }
+            } else {
+                set.reps * set.weight
+            }
+        }
     }
 
     NeonCard(

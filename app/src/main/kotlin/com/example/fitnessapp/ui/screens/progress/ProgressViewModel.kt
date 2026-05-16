@@ -71,12 +71,26 @@ class ProgressViewModel(
                                     .map { (date, sets) ->
                                         ProgressPoint(
                                             date = date,
-                                            value = sets.maxOf { progressRepository.calculateEstimated1RM(it.setEntity.reps, it.setEntity.weight) }
+                                            value = sets.maxOf { 
+                                                progressRepository.calculateEstimated1RM(
+                                                    it.setEntity.reps, 
+                                                    it.setEntity.weight, 
+                                                    it.setEntity.isDrop, 
+                                                    it.startingWeight
+                                                ) 
+                                            }
                                         )
                                     }
                                     .sortedBy { it.date }
                                 
-                                val volume = setsWithDate.sumOf { progressRepository.calculateVolume(it.setEntity.reps, it.setEntity.weight) }
+                                val volume = setsWithDate.sumOf { 
+                                    progressRepository.calculateVolume(
+                                        it.setEntity.reps, 
+                                        it.setEntity.weight, 
+                                        it.setEntity.isDrop, 
+                                        it.startingWeight
+                                    ) 
+                                }
                                 val currentMax1RM = if (points.isNotEmpty()) points.last().value else 0.0
                                 val projection = calculateProgressProjection(exercise.id, setsWithDate)
                                 
@@ -125,9 +139,23 @@ class ProgressViewModel(
             cal.timeInMillis
         }.mapValues { (_, sets) ->
             val dailyBest1RM = sets.filter { it.setEntity.reps <= 12 }
-                .map { progressRepository.calculateEstimated1RM(it.setEntity.reps, it.setEntity.weight) }
+                .map { 
+                    progressRepository.calculateEstimated1RM(
+                        it.setEntity.reps, 
+                        it.setEntity.weight, 
+                        it.setEntity.isDrop, 
+                        it.startingWeight
+                    ) 
+                }
                 .maxOrNull() ?: 0.0
-            val dailyVolume = sets.sumOf { it.setEntity.reps * it.setEntity.weight }
+            val dailyVolume = sets.sumOf { 
+                progressRepository.calculateVolume(
+                    it.setEntity.reps, 
+                    it.setEntity.weight, 
+                    it.setEntity.isDrop, 
+                    it.startingWeight
+                )
+            }
             Pair(dailyBest1RM, dailyVolume)
         }.toSortedMap()
 

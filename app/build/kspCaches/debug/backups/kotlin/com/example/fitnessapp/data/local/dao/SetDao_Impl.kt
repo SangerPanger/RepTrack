@@ -182,7 +182,7 @@ public class SetDao_Impl(
   public override fun getAllSetsForExerciseWithDate(exerciseId: Long): Flow<List<SetWithDate>> {
     val _sql: String = """
         |
-        |        SELECT s.*, w.startedAt 
+        |        SELECT s.*, w.startedAt, we.startingWeight
         |        FROM sets s 
         |        JOIN workout_exercises we ON s.workoutExerciseId = we.id 
         |        JOIN workouts w ON we.workoutId = w.id
@@ -206,11 +206,14 @@ public class SetDao_Impl(
         val _cursorIndexOfCompletedAt: Int = getColumnIndexOrThrow(_stmt, "completedAt")
         val _cursorIndexOfCompleted: Int = getColumnIndexOrThrow(_stmt, "completed")
         val _cursorIndexOfStartedAt: Int = getColumnIndexOrThrow(_stmt, "startedAt")
+        val _cursorIndexOfStartingWeight: Int = getColumnIndexOrThrow(_stmt, "startingWeight")
         val _result: MutableList<SetWithDate> = mutableListOf()
         while (_stmt.step()) {
           val _item: SetWithDate
           val _tmpStartedAt: Long
           _tmpStartedAt = _stmt.getLong(_cursorIndexOfStartedAt)
+          val _tmpStartingWeight: Double
+          _tmpStartingWeight = _stmt.getDouble(_cursorIndexOfStartingWeight)
           val _tmpSetEntity: SetEntity
           val _tmpId: Long
           _tmpId = _stmt.getLong(_cursorIndexOfId)
@@ -244,7 +247,7 @@ public class SetDao_Impl(
           _tmpCompleted = _tmp_1 != 0
           _tmpSetEntity =
               SetEntity(_tmpId,_tmpWorkoutExerciseId,_tmpSetNumber,_tmpReps,_tmpWeight,_tmpRpe,_tmpIsDrop,_tmpCompletedAt,_tmpCompleted)
-          _item = SetWithDate(_tmpSetEntity,_tmpStartedAt)
+          _item = SetWithDate(_tmpSetEntity,_tmpStartedAt,_tmpStartingWeight)
           _result.add(_item)
         }
         _result

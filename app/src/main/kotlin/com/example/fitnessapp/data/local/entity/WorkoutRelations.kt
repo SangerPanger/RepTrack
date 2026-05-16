@@ -29,5 +29,6 @@ data class WorkoutExerciseWithSets(
 
 data class SetWithDate(
     @Embedded val setEntity: SetEntity,
-    val startedAt: Long
+    val startedAt: Long,
+    val startingWeight: Double = 0.0
 )

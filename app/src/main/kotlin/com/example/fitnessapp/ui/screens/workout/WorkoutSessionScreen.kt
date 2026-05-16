@@ -240,7 +240,19 @@ fun WorkoutSessionScreen(
                                     }
                                 }
                             }
-                            val exerciseVolume = exerciseWithSets.sets.filter { it.completed }.sumOf { it.reps * it.weight }
+                            val exerciseVolume = exerciseWithSets.sets.filter { it.completed }.sumOf { set ->
+                                if (set.isDrop) {
+                                    val weight = set.weight
+                                    val startingWeight = exerciseWithSets.workoutExercise.startingWeight
+                                    if (startingWeight > 0) {
+                                        ((weight / startingWeight) / 2.0) * startingWeight * set.reps
+                                    } else {
+                                        (weight / 2.0) * set.reps
+                                    }
+                                } else {
+                                    set.reps * set.weight
+                                }
+                            }
                             if (exerciseVolume > 0) {
                                 Text(
                                     text = "Total Volume: ${String.format("%.1f", exerciseVolume)} kg",
