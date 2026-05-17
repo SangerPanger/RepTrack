@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import com.example.fitnessapp.domain.model.ProgressPredictionResult
 import com.example.fitnessapp.ui.screens.progress.ProgressPoint
-import com.example.fitnessapp.ui.screens.progress.ProgressProjection
 import com.example.fitnessapp.ui.theme.NeonCyan
 import com.example.fitnessapp.ui.theme.NeonPurple
 import com.example.fitnessapp.ui.theme.SuccessGreen
@@ -20,7 +20,7 @@ import com.example.fitnessapp.ui.theme.SuccessGreen
 @Composable
 fun ProgressLineChart(
     points: List<ProgressPoint>,
-    projection: ProgressProjection? = null,
+    prediction: ProgressPredictionResult? = null,
     modifier: Modifier = Modifier
 ) {
     if (points.isEmpty()) return
@@ -37,12 +37,12 @@ fun ProgressLineChart(
             
             val lastPoint = points.last()
             val projectionDate = lastPoint.date + (28L * 24 * 60 * 60 * 1000)
-            val projectionValue = projection?.predictedEstimated1RMIn4Weeks ?: lastPoint.value
+            val projectionValue = prediction?.predictedEstimated1RM4Weeks ?: lastPoint.value
 
             val minX = points.minOf { it.date }
-            val maxX = if (projection != null) projectionDate else points.maxOf { it.date }
-            val minY = (points.map { it.value } + (projection?.predictedEstimated1RMIn4Weeks ?: lastPoint.value)).minOrNull() ?: 0.0
-            val maxY = (points.map { it.value } + (projection?.predictedEstimated1RMIn4Weeks ?: lastPoint.value)).maxOrNull() ?: 1.0
+            val maxX = if (prediction != null) projectionDate else points.maxOf { it.date }
+            val minY = (points.map { it.value } + (prediction?.predictedEstimated1RM4Weeks ?: lastPoint.value)).minOrNull() ?: 0.0
+            val maxY = (points.map { it.value } + (prediction?.predictedEstimated1RM4Weeks ?: lastPoint.value)).maxOrNull() ?: 1.0
             
             val rangeX = if (maxX > minX) maxX - minX else 1L
             val rangeY = if (maxY > minY) (maxY - minY).coerceAtLeast(1.0) else 1.0
@@ -75,7 +75,7 @@ fun ProgressLineChart(
             )
 
             // Draw projection
-            projection?.let {
+            prediction?.let {
                 val projOffset = getOffset(projectionDate, projectionValue)
                 val lastOffset = chartPoints.last()
                 

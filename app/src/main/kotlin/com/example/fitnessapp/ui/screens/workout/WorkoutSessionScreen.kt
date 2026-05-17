@@ -86,9 +86,10 @@ fun WorkoutSessionScreen(
                 text = if (workout?.finishedAt == null) "Finish Workout" else "Workout Finished",
                 onClick = {
                     if (workout?.finishedAt == null) {
-                        viewModel.finishWorkout(null)
+                        viewModel.finishWorkout(null, onFinishWorkout)
+                    } else {
+                        onFinishWorkout()
                     }
-                    onFinishWorkout()
                 },
                 modifier = Modifier.padding(16.dp),
                 containerColor = if (workout?.finishedAt == null) {

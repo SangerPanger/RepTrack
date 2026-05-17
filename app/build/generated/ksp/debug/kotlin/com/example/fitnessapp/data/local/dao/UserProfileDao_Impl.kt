@@ -6,8 +6,12 @@ import androidx.room.coroutines.createFlow
 import androidx.room.util.getColumnIndexOrThrow
 import androidx.room.util.performSuspending
 import androidx.sqlite.SQLiteStatement
+import com.example.fitnessapp.`data`.local.database.Converters
 import com.example.fitnessapp.`data`.local.entity.UserProfileEntity
+import com.example.fitnessapp.domain.model.Sex
+import com.example.fitnessapp.domain.model.TrainingGoal
 import javax.`annotation`.processing.Generated
+import kotlin.Boolean
 import kotlin.Double
 import kotlin.Int
 import kotlin.String
@@ -25,19 +29,35 @@ public class UserProfileDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfUserProfileEntity: EntityInsertAdapter<UserProfileEntity>
+
+  private val __converters: Converters = Converters()
   init {
     this.__db = __db
     this.__insertAdapterOfUserProfileEntity = object : EntityInsertAdapter<UserProfileEntity>() {
       protected override fun createQuery(): String =
-          "INSERT OR REPLACE INTO `user_profile` (`id`,`age`,`gender`,`height`,`currentWeight`,`targetWeight`) VALUES (?,?,?,?,?,?)"
+          "INSERT OR REPLACE INTO `user_profile` (`id`,`age`,`sex`,`heightCm`,`bodyWeightKg`,`trainingExperienceMonths`,`detrainingWeeks`,`isReturningLifter`,`plannedWeeklyWorkouts`,`averageProteinGramsPerDay`,`averageCaloriesPerDay`,`estimatedTdee`,`fatGramsPerDay`,`fatPercentCalories`,`goal`,`useSettingsForNutrition`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: UserProfileEntity) {
         statement.bindLong(1, entity.id.toLong())
         statement.bindLong(2, entity.age.toLong())
-        statement.bindText(3, entity.gender)
-        statement.bindDouble(4, entity.height)
-        statement.bindDouble(5, entity.currentWeight)
-        statement.bindDouble(6, entity.targetWeight)
+        val _tmp: String = __converters.fromSex(entity.sex)
+        statement.bindText(3, _tmp)
+        statement.bindDouble(4, entity.heightCm)
+        statement.bindDouble(5, entity.bodyWeightKg)
+        statement.bindLong(6, entity.trainingExperienceMonths.toLong())
+        statement.bindLong(7, entity.detrainingWeeks.toLong())
+        val _tmp_1: Int = if (entity.isReturningLifter) 1 else 0
+        statement.bindLong(8, _tmp_1.toLong())
+        statement.bindLong(9, entity.plannedWeeklyWorkouts.toLong())
+        statement.bindDouble(10, entity.averageProteinGramsPerDay)
+        statement.bindDouble(11, entity.averageCaloriesPerDay)
+        statement.bindDouble(12, entity.estimatedTdee)
+        statement.bindDouble(13, entity.fatGramsPerDay)
+        statement.bindDouble(14, entity.fatPercentCalories)
+        val _tmp_2: String = __converters.fromTrainingGoal(entity.goal)
+        statement.bindText(15, _tmp_2)
+        val _tmp_3: Int = if (entity.useSettingsForNutrition) 1 else 0
+        statement.bindLong(16, _tmp_3.toLong())
       }
     }
   }
@@ -54,26 +74,71 @@ public class UserProfileDao_Impl(
       try {
         val _cursorIndexOfId: Int = getColumnIndexOrThrow(_stmt, "id")
         val _cursorIndexOfAge: Int = getColumnIndexOrThrow(_stmt, "age")
-        val _cursorIndexOfGender: Int = getColumnIndexOrThrow(_stmt, "gender")
-        val _cursorIndexOfHeight: Int = getColumnIndexOrThrow(_stmt, "height")
-        val _cursorIndexOfCurrentWeight: Int = getColumnIndexOrThrow(_stmt, "currentWeight")
-        val _cursorIndexOfTargetWeight: Int = getColumnIndexOrThrow(_stmt, "targetWeight")
+        val _cursorIndexOfSex: Int = getColumnIndexOrThrow(_stmt, "sex")
+        val _cursorIndexOfHeightCm: Int = getColumnIndexOrThrow(_stmt, "heightCm")
+        val _cursorIndexOfBodyWeightKg: Int = getColumnIndexOrThrow(_stmt, "bodyWeightKg")
+        val _cursorIndexOfTrainingExperienceMonths: Int = getColumnIndexOrThrow(_stmt,
+            "trainingExperienceMonths")
+        val _cursorIndexOfDetrainingWeeks: Int = getColumnIndexOrThrow(_stmt, "detrainingWeeks")
+        val _cursorIndexOfIsReturningLifter: Int = getColumnIndexOrThrow(_stmt, "isReturningLifter")
+        val _cursorIndexOfPlannedWeeklyWorkouts: Int = getColumnIndexOrThrow(_stmt,
+            "plannedWeeklyWorkouts")
+        val _cursorIndexOfAverageProteinGramsPerDay: Int = getColumnIndexOrThrow(_stmt,
+            "averageProteinGramsPerDay")
+        val _cursorIndexOfAverageCaloriesPerDay: Int = getColumnIndexOrThrow(_stmt,
+            "averageCaloriesPerDay")
+        val _cursorIndexOfEstimatedTdee: Int = getColumnIndexOrThrow(_stmt, "estimatedTdee")
+        val _cursorIndexOfFatGramsPerDay: Int = getColumnIndexOrThrow(_stmt, "fatGramsPerDay")
+        val _cursorIndexOfFatPercentCalories: Int = getColumnIndexOrThrow(_stmt,
+            "fatPercentCalories")
+        val _cursorIndexOfGoal: Int = getColumnIndexOrThrow(_stmt, "goal")
+        val _cursorIndexOfUseSettingsForNutrition: Int = getColumnIndexOrThrow(_stmt,
+            "useSettingsForNutrition")
         val _result: UserProfileEntity?
         if (_stmt.step()) {
           val _tmpId: Int
           _tmpId = _stmt.getLong(_cursorIndexOfId).toInt()
           val _tmpAge: Int
           _tmpAge = _stmt.getLong(_cursorIndexOfAge).toInt()
-          val _tmpGender: String
-          _tmpGender = _stmt.getText(_cursorIndexOfGender)
-          val _tmpHeight: Double
-          _tmpHeight = _stmt.getDouble(_cursorIndexOfHeight)
-          val _tmpCurrentWeight: Double
-          _tmpCurrentWeight = _stmt.getDouble(_cursorIndexOfCurrentWeight)
-          val _tmpTargetWeight: Double
-          _tmpTargetWeight = _stmt.getDouble(_cursorIndexOfTargetWeight)
+          val _tmpSex: Sex
+          val _tmp: String
+          _tmp = _stmt.getText(_cursorIndexOfSex)
+          _tmpSex = __converters.toSex(_tmp)
+          val _tmpHeightCm: Double
+          _tmpHeightCm = _stmt.getDouble(_cursorIndexOfHeightCm)
+          val _tmpBodyWeightKg: Double
+          _tmpBodyWeightKg = _stmt.getDouble(_cursorIndexOfBodyWeightKg)
+          val _tmpTrainingExperienceMonths: Int
+          _tmpTrainingExperienceMonths =
+              _stmt.getLong(_cursorIndexOfTrainingExperienceMonths).toInt()
+          val _tmpDetrainingWeeks: Int
+          _tmpDetrainingWeeks = _stmt.getLong(_cursorIndexOfDetrainingWeeks).toInt()
+          val _tmpIsReturningLifter: Boolean
+          val _tmp_1: Int
+          _tmp_1 = _stmt.getLong(_cursorIndexOfIsReturningLifter).toInt()
+          _tmpIsReturningLifter = _tmp_1 != 0
+          val _tmpPlannedWeeklyWorkouts: Int
+          _tmpPlannedWeeklyWorkouts = _stmt.getLong(_cursorIndexOfPlannedWeeklyWorkouts).toInt()
+          val _tmpAverageProteinGramsPerDay: Double
+          _tmpAverageProteinGramsPerDay = _stmt.getDouble(_cursorIndexOfAverageProteinGramsPerDay)
+          val _tmpAverageCaloriesPerDay: Double
+          _tmpAverageCaloriesPerDay = _stmt.getDouble(_cursorIndexOfAverageCaloriesPerDay)
+          val _tmpEstimatedTdee: Double
+          _tmpEstimatedTdee = _stmt.getDouble(_cursorIndexOfEstimatedTdee)
+          val _tmpFatGramsPerDay: Double
+          _tmpFatGramsPerDay = _stmt.getDouble(_cursorIndexOfFatGramsPerDay)
+          val _tmpFatPercentCalories: Double
+          _tmpFatPercentCalories = _stmt.getDouble(_cursorIndexOfFatPercentCalories)
+          val _tmpGoal: TrainingGoal
+          val _tmp_2: String
+          _tmp_2 = _stmt.getText(_cursorIndexOfGoal)
+          _tmpGoal = __converters.toTrainingGoal(_tmp_2)
+          val _tmpUseSettingsForNutrition: Boolean
+          val _tmp_3: Int
+          _tmp_3 = _stmt.getLong(_cursorIndexOfUseSettingsForNutrition).toInt()
+          _tmpUseSettingsForNutrition = _tmp_3 != 0
           _result =
-              UserProfileEntity(_tmpId,_tmpAge,_tmpGender,_tmpHeight,_tmpCurrentWeight,_tmpTargetWeight)
+              UserProfileEntity(_tmpId,_tmpAge,_tmpSex,_tmpHeightCm,_tmpBodyWeightKg,_tmpTrainingExperienceMonths,_tmpDetrainingWeeks,_tmpIsReturningLifter,_tmpPlannedWeeklyWorkouts,_tmpAverageProteinGramsPerDay,_tmpAverageCaloriesPerDay,_tmpEstimatedTdee,_tmpFatGramsPerDay,_tmpFatPercentCalories,_tmpGoal,_tmpUseSettingsForNutrition)
         } else {
           _result = null
         }

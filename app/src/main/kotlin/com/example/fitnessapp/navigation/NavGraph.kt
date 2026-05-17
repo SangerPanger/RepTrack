@@ -2,6 +2,7 @@ package com.example.fitnessapp.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.fitnessapp.FitnessApp
 import com.example.fitnessapp.ui.components.AppScaffold
@@ -33,15 +35,15 @@ fun NavGraph(
     val context = LocalContext.current
     val app = context.applicationContext as FitnessApp
     
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     AppScaffold(
         currentRoute = currentRoute,
         onNavigate = { route ->
             navController.navigate(route) {
-                popUpTo("home") { saveState = true }
+                popUpTo("home") { inclusive = false }
                 launchSingleTop = true
-                restoreState = true
             }
         }
     ) { padding ->
@@ -59,7 +61,11 @@ fun NavGraph(
                 HomeScreen(
                     viewModel = viewModel,
                     onWorkoutClick = { id ->
-                        navController.navigate("workout_session/$id")
+                        navController.navigate("workout_session/$id") {
+                            // Don't popUpTo home if we want to be able to go back, 
+                            // but usually starting a workout should be a clean state.
+                            // However, we MUST NOT use launchSingleTop if it causes issues with rapid starts.
+                        }
                     }
                 )
             }
@@ -77,12 +83,8 @@ fun NavGraph(
                 WorkoutSessionScreen(
                     viewModel = viewModel,
                     onFinishWorkout = {
-                        if (navController.previousBackStackEntry?.destination?.route == "history") {
-                            navController.popBackStack("history", inclusive = false)
-                        } else {
-                            navController.navigate("home") {
-                                popUpTo("home") { inclusive = true }
-                            }
+                        navController.navigate("home") {
+                            popUpTo("home") { inclusive = true }
                         }
                     }
                 )
@@ -105,7 +107,7 @@ fun NavGraph(
             composable("progress") {
                 val viewModel: ProgressViewModel = viewModel(factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ProgressViewModel(app.progressRepository, app.exerciseRepository, app.foodRepository) as T
+                        return ProgressViewModel(app.progressRepository, app.exerciseRepository, app.foodRepository, app.workoutRepository) as T
                     }
                 })
                 ProgressScreen(viewModel = viewModel)

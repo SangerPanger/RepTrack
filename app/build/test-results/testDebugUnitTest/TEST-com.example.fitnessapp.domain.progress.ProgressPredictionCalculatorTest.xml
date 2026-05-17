@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-05-17T15:01:55.222Z" hostname="DESKTOP-CPAIOAE" time="0.02">
+  <properties/>
+  <testcase name="intermediate in deficit with sufficient protein" classname="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" time="0.018"/>
+  <testcase name="newbie in surplus with sufficient protein" classname="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" time="0.0"/>
+  <testcase name="older user with sufficient vs insufficient protein" classname="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" time="0.0"/>
+  <testcase name="returning lifter below previous peak" classname="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" time="0.0"/>
+  <testcase name="low protein case" classname="com.example.fitnessapp.domain.progress.ProgressPredictionCalculatorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

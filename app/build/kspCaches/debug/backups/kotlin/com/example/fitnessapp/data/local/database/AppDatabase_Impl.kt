@@ -72,7 +72,7 @@ public class AppDatabase_Impl : AppDatabase() {
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
     val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(7,
-        "df8c3cde4a1d3136c9c115d2e0942ac6", "95e369542cc232cc65309fa63cd3fad2") {
+        "4100d6467d21ec07b31e197f0537c961", "8f32548caec4ec0dac656d25a13fad95") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `workouts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `finishedAt` INTEGER, `notes` TEXT, `manualDurationMinutes` INTEGER, `durationOffsetMs` INTEGER NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `muscleGroup` TEXT)")
@@ -81,10 +81,10 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_exercises_exerciseId` ON `workout_exercises` (`exerciseId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `sets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutExerciseId` INTEGER NOT NULL, `setNumber` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `rpe` INTEGER, `isDrop` INTEGER NOT NULL, `completedAt` INTEGER, `completed` INTEGER NOT NULL, FOREIGN KEY(`workoutExerciseId`) REFERENCES `workout_exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_sets_workoutExerciseId` ON `sets` (`workoutExerciseId`)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `user_profile` (`id` INTEGER NOT NULL, `age` INTEGER NOT NULL, `gender` TEXT NOT NULL, `height` REAL NOT NULL, `currentWeight` REAL NOT NULL, `targetWeight` REAL NOT NULL, PRIMARY KEY(`id`))")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `user_profile` (`id` INTEGER NOT NULL, `age` INTEGER NOT NULL, `sex` TEXT NOT NULL, `heightCm` REAL NOT NULL, `bodyWeightKg` REAL NOT NULL, `trainingExperienceMonths` INTEGER NOT NULL, `detrainingWeeks` INTEGER NOT NULL, `isReturningLifter` INTEGER NOT NULL, `plannedWeeklyWorkouts` INTEGER NOT NULL, `averageProteinGramsPerDay` REAL NOT NULL, `averageCaloriesPerDay` REAL NOT NULL, `estimatedTdee` REAL NOT NULL, `fatGramsPerDay` REAL NOT NULL, `fatPercentCalories` REAL NOT NULL, `goal` TEXT NOT NULL, `useSettingsForNutrition` INTEGER NOT NULL, PRIMARY KEY(`id`))")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `food_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `carbs` REAL NOT NULL, `fats` REAL NOT NULL, `protein` REAL NOT NULL, `calories` REAL NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df8c3cde4a1d3136c9c115d2e0942ac6')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4100d6467d21ec07b31e197f0537c961')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -241,14 +241,37 @@ public class AppDatabase_Impl : AppDatabase() {
             TableInfo.CREATED_FROM_ENTITY))
         _columnsUserProfile.put("age", TableInfo.Column("age", "INTEGER", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
-        _columnsUserProfile.put("gender", TableInfo.Column("gender", "TEXT", true, 0, null,
+        _columnsUserProfile.put("sex", TableInfo.Column("sex", "TEXT", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
-        _columnsUserProfile.put("height", TableInfo.Column("height", "REAL", true, 0, null,
+        _columnsUserProfile.put("heightCm", TableInfo.Column("heightCm", "REAL", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
-        _columnsUserProfile.put("currentWeight", TableInfo.Column("currentWeight", "REAL", true, 0,
+        _columnsUserProfile.put("bodyWeightKg", TableInfo.Column("bodyWeightKg", "REAL", true, 0,
             null, TableInfo.CREATED_FROM_ENTITY))
-        _columnsUserProfile.put("targetWeight", TableInfo.Column("targetWeight", "REAL", true, 0,
+        _columnsUserProfile.put("trainingExperienceMonths",
+            TableInfo.Column("trainingExperienceMonths", "INTEGER", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("detrainingWeeks", TableInfo.Column("detrainingWeeks", "INTEGER",
+            true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("isReturningLifter", TableInfo.Column("isReturningLifter",
+            "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("plannedWeeklyWorkouts", TableInfo.Column("plannedWeeklyWorkouts",
+            "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("averageProteinGramsPerDay",
+            TableInfo.Column("averageProteinGramsPerDay", "REAL", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("averageCaloriesPerDay", TableInfo.Column("averageCaloriesPerDay",
+            "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("estimatedTdee", TableInfo.Column("estimatedTdee", "REAL", true, 0,
             null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("fatGramsPerDay", TableInfo.Column("fatGramsPerDay", "REAL", true,
+            0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("fatPercentCalories", TableInfo.Column("fatPercentCalories", "REAL",
+            true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("goal", TableInfo.Column("goal", "TEXT", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsUserProfile.put("useSettingsForNutrition",
+            TableInfo.Column("useSettingsForNutrition", "INTEGER", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysUserProfile: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         val _indicesUserProfile: MutableSet<TableInfo.Index> = mutableSetOf()
         val _infoUserProfile: TableInfo = TableInfo("user_profile", _columnsUserProfile,

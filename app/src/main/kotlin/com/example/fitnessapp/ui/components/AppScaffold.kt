@@ -12,7 +12,7 @@ fun AppScaffold(
 ) {
     Scaffold(
         bottomBar = {
-            if (currentRoute != "workout_session") {
+            if (currentRoute != null && !currentRoute.startsWith("workout_session")) {
                 BottomNavigationBar(currentRoute = currentRoute, onNavigate = onNavigate)
             }
         },

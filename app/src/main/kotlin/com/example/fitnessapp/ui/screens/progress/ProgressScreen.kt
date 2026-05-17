@@ -12,12 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.fitnessapp.domain.model.PotentialLabel
+import com.example.fitnessapp.domain.model.PredictionConfidence
+import com.example.fitnessapp.domain.model.ProgressPredictionResult
 import com.example.fitnessapp.ui.components.NeonCard
 import com.example.fitnessapp.ui.components.ProgressLineChart
 import com.example.fitnessapp.ui.components.StatCard
 import com.example.fitnessapp.ui.theme.NeonCyan
 import com.example.fitnessapp.ui.theme.SuccessGreen
 import com.example.fitnessapp.ui.theme.NeonPurple
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -183,7 +187,7 @@ fun ExerciseProgressCard(progress: ExerciseProgress) {
             
             ProgressLineChart(
                 points = progress.historyPoints,
-                projection = progress.projection,
+                prediction = progress.prediction,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
@@ -207,9 +211,9 @@ fun ExerciseProgressCard(progress: ExerciseProgress) {
                 )
             }
             
-            progress.projection?.let { proj ->
+            progress.prediction?.let { pred ->
                 Spacer(modifier = Modifier.height(24.dp))
-                ProjectionSection(proj)
+                ProjectionSection(pred)
             } ?: run {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -223,15 +227,16 @@ fun ExerciseProgressCard(progress: ExerciseProgress) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProjectionSection(projection: ProgressProjection) {
+fun ProjectionSection(prediction: ProgressPredictionResult) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
     ) {
         Text(
-            text = "4-WEEK PROJECTION",
+            text = "4-WEEK ESTIMATE (NOT A GUARANTEE)",
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
             color = NeonPurple,
@@ -243,8 +248,23 @@ fun ProjectionSection(projection: ProgressProjection) {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                ProjectionStatRow("Est. 1RM", projection.predictedEstimated1RMIn4Weeks, projection.estimated1RMChangePercent, "kg")
-                ProjectionStatRow("Weekly Vol", projection.predictedWeeklyVolumeIn4Weeks, projection.volumeChangePercent, "kg")
+                Text(
+                    text = "Est. 4-week strength potential: +${prediction.strengthGainPercent4Weeks}%",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Predicted 1RM: ${prediction.predictedEstimated1RM4Weeks} kg",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Hypertrophy potential: ${prediction.hypertrophyPotentialLabel}",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = NeonCyan
+                )
             }
             
             Column(
@@ -257,22 +277,50 @@ fun ProjectionSection(projection: ProgressProjection) {
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
-                    text = projection.confidence.name,
+                    text = prediction.predictionConfidence.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = when(projection.confidence) {
-                        ProjectionConfidence.HIGH -> SuccessGreen
-                        ProjectionConfidence.MEDIUM -> NeonCyan
-                        ProjectionConfidence.LOW -> MaterialTheme.colorScheme.error
+                    color = when(prediction.predictionConfidence) {
+                        PredictionConfidence.HIGH -> SuccessGreen
+                        PredictionConfidence.MEDIUM -> NeonCyan
+                        PredictionConfidence.LOW -> MaterialTheme.colorScheme.error
                     }
                 )
+            }
+        }
+
+        if (prediction.explanation.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = prediction.explanation,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f)
+            )
+        }
+
+        if (prediction.warnings.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                prediction.warnings.forEach { warning ->
+                    SuggestionChip(
+                        onClick = { },
+                        label = { Text(warning, style = MaterialTheme.typography.labelSmall) },
+                        colors = SuggestionChipDefaults.suggestionChipColors(
+                            labelColor = MaterialTheme.colorScheme.error,
+                            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f)
+                        )
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
         
         Text(
-            text = "Projection is based on recent logged training history and may be inaccurate.",
+            text = "Estimates are based on your profile, nutrition, and training history.",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
@@ -280,31 +328,3 @@ fun ProjectionSection(projection: ProgressProjection) {
     }
 }
 
-@Composable
-fun ProjectionStatRow(label: String, value: Double, change: Double, unit: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = String.format("%.1f %s", value, unit),
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = String.format("(%+.1f%%)", change),
-                style = MaterialTheme.typography.labelSmall,
-                color = if (change >= 0) SuccessGreen else MaterialTheme.colorScheme.error,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}

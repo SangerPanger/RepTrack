@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.fitnessapp.data.local.dao.ExerciseDao
 import com.example.fitnessapp.data.local.dao.SetDao
 import com.example.fitnessapp.data.local.dao.WorkoutDao
@@ -27,6 +28,7 @@ import com.example.fitnessapp.data.local.entity.FoodLogEntity
     version = 7,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutDao(): WorkoutDao
     abstract fun exerciseDao(): ExerciseDao

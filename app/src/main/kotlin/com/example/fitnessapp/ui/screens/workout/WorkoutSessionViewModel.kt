@@ -59,42 +59,47 @@ class WorkoutSessionViewModel(
         
         viewModelScope.launch {
             while (true) {
-                val currentWorkout = _workout.value
-                if (currentWorkout != null && currentWorkout.finishedAt == null) {
-                    val now = System.currentTimeMillis()
+            val currentWorkout = _workout.value
+            if (currentWorkout != null && currentWorkout.finishedAt == null) {
+                val now = System.currentTimeMillis()
+                
+                // Workout timer
+                val elapsedMs = (now - currentWorkout.startedAt) - currentWorkout.durationOffsetMs
+                val totalSeconds = (elapsedMs / 1000).coerceAtLeast(0)
+                val seconds = totalSeconds % 60
+                val minutes = (totalSeconds / 60) % 60
+                val hours = totalSeconds / 3600
+                _elapsedTime.value = String.format("%02d:%02d:%02d", hours.toInt(), minutes.toInt(), seconds.toInt())
+                
+                // Rest timers for each exercise
+                val newRestTimers = mutableMapOf<Long, String>()
+                val currentExercises = _workoutExercises.value
+                currentExercises.forEach { exerciseWithSets ->
+                    val allSetsCompleted = exerciseWithSets.sets.isNotEmpty() && exerciseWithSets.sets.all { it.completed }
                     
-                    // Workout timer
-                    val elapsedMs = (now - currentWorkout.startedAt) - currentWorkout.durationOffsetMs
-                    val totalSeconds = (elapsedMs / 1000).coerceAtLeast(0)
-                    val seconds = totalSeconds % 60
-                    val minutes = (totalSeconds / 60) % 60
-                    val hours = totalSeconds / 3600
-                    _elapsedTime.value = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                    
-                    // Rest timers for each exercise
-                    val newRestTimers = mutableMapOf<Long, String>()
-                    _workoutExercises.value.forEach { exerciseWithSets ->
-                        val allSetsCompleted = exerciseWithSets.sets.isNotEmpty() && exerciseWithSets.sets.all { it.completed }
-                        
-                        if (allSetsCompleted) {
-                            // If all sets are finished, we don't need a rest timer for the next set
-                            newRestTimers[exerciseWithSets.workoutExercise.id] = "00:00"
-                        } else {
-                            val lastCompletedSet = exerciseWithSets.sets
+                    if (allSetsCompleted) {
+                        // If all sets are finished, we don't need a rest timer for the next set
+                        newRestTimers[exerciseWithSets.workoutExercise.id] = "00:00"
+                    } else {
+                        val lastCompletedSet = try {
+                            exerciseWithSets.sets
                                 .filter { it.completed && it.completedAt != null }
                                 .maxByOrNull { it.completedAt!! }
-                            
-                            val referenceTime = lastCompletedSet?.completedAt ?: currentWorkout.startedAt
-                            
-                            val restMs = (now - referenceTime) - currentWorkout.durationOffsetMs
-                            val restSeconds = (restMs / 1000).coerceAtLeast(0)
-                            val rSec = restSeconds % 60
-                            val rMin = restSeconds / 60
-                            newRestTimers[exerciseWithSets.workoutExercise.id] = String.format("%02d:%02d", rMin, rSec)
+                        } catch (e: Exception) {
+                            null
                         }
+                        
+                        val referenceTime = lastCompletedSet?.completedAt ?: currentWorkout.startedAt
+                        
+                        val restMs = (now - referenceTime) - currentWorkout.durationOffsetMs
+                        val restSeconds = (restMs / 1000).coerceAtLeast(0)
+                        val rSec = restSeconds % 60
+                        val rMin = restSeconds / 60
+                        newRestTimers[exerciseWithSets.workoutExercise.id] = String.format("%02d:%02d", rMin.toInt(), rSec.toInt())
                     }
-                    _restTimers.value = newRestTimers
                 }
+                _restTimers.value = newRestTimers
+            }
                 delay(1000)
             }
         }
@@ -149,7 +154,7 @@ class WorkoutSessionViewModel(
             val exerciseWithSets = _workoutExercises.value.find { it.workoutExercise.id == workoutExerciseId } ?: return@launch
             val currentSets = exerciseWithSets.sets
             val nextSetNumber = currentSets.size + 1
-            val lastSet = currentSets.lastOrNull()
+            val lastSet = try { currentSets.lastOrNull() } catch (e: Exception) { null }
 
             val weight = if (lastSet != null) {
                 (lastSet.weight - exerciseWithSets.workoutExercise.dropWeightDecrease).coerceAtLeast(0.0)
@@ -173,7 +178,7 @@ class WorkoutSessionViewModel(
             val exerciseWithSets = _workoutExercises.value.find { it.workoutExercise.id == workoutExerciseId } ?: return@launch
             val currentSets = exerciseWithSets.sets
             val nextSetNumber = currentSets.size + 1
-            val lastSet = currentSets.lastOrNull()
+            val lastSet = try { currentSets.lastOrNull() } catch (e: Exception) { null }
 
             val weight = if (exerciseWithSets.workoutExercise.isDropset) {
                 exerciseWithSets.workoutExercise.startingWeight
@@ -237,9 +242,10 @@ class WorkoutSessionViewModel(
         }
     }
 
-    fun finishWorkout(notes: String?) {
+    fun finishWorkout(notes: String?, onFinished: () -> Unit) {
         viewModelScope.launch {
             workoutRepository.finishWorkout(workoutId, notes)
+            onFinished()
         }
     }
 
