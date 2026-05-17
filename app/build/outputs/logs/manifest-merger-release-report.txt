@@ -1,0 +1,329 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:2:1-27:12
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\2ddf64f636b76b827ccf3d11871a4e3a\transformed\navigation-common-2.7.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\13c33ce7974f04c66b55c088a3caeef3\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b016636538a4435e0341c4f7e46e6c8\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\18d98fe0c3476d52926d1f075a659675\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\80b645d2eae934227d9a5fc5527e1b64\transformed\navigation-compose-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\1e1b7326b7a6f9af17e61b2a7b4558f9\transformed\activity-1.9.3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\f4cd90ba4acde5efaefd3f8a159063ad\transformed\activity-ktx-1.9.3\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6a1d9f2b0f4b8d48a60fce32399da8a\transformed\material3-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\198696e8067f185b6c870ee81b5fa15c\transformed\activity-compose-1.9.3\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\c06a58836a21d2d605dc7ae5dc1103b1\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\9d074b19a5f9609280511c4cb690c686\transformed\savedstate-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a11577d45235a5c1d418935b570e9a62\transformed\animation-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\db63f3074cf04cdcf3f77a3b51165fbf\transformed\material-ripple-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\4555dc6b882f915d85433e151dba02fb\transformed\animation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f13c1bc4fd56cbbb2fbf7b3175cf5b10\transformed\foundation-layout-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e9267310f51768feac050489c7042592\transformed\foundation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\79ff2513457d622ef435a114fb13fff3\transformed\ui-unit-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a8793698371111509565331ef3328749\transformed\ui-geometry-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f572e898a405f1b66e4e9b3a51f034d7\transformed\ui-util-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\0339c42f2f3d35d48c1c5a4ff3c66ced\transformed\ui-tooling-preview-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\aaeb394cc30a8ab3f7e5687b10c170e8\transformed\ui-graphics-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6ae2cec01e89adb7175bdd1e0d00323\transformed\ui-text-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\313d8254e62b607c75a75fe65e656e8e\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a562d739d4fad1fbf7c92e461bf4c24b\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\85945d843efaaf1d3700be0096656145\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\40fcd956b6210bb5bed6ec63b67708ce\transformed\lifecycle-runtime-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6cbf91c3beccebc2db9e2e616be3e34\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\d95a331337a33bcdd92a8537f81166ec\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\25605b23880916c10e77758a4c7757b5\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\43b9dfa4c0576ca6f9062f3841f22e1a\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\97f2b1b3ff999c78a40fbb418725805d\transformed\material-icons-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\694e9d1f7226d00658a3f4402ce03667\transformed\ui-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\69d247ba4fae04cd66f08ce92701f99f\transformed\autofill-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\f7da70a0240ff620ccf34aca38a82b63\transformed\graphics-path-1.0.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8e85f3dea0497c42faef09b64556870d\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\101d1ff97a20d6f42503ce603a4a9e8a\transformed\core-ktx-1.15.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.room:room-ktx:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\db3613c21f86b3e6b26ebc73b96851e1\transformed\room-ktx-2.7.0-alpha01\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\ab351f88113962fdb8a90b78ecb2345a\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ad86ccc2968dbddbdb93c9b363104ce\transformed\tracing-1.2.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\effa1c9eaedec758367e5bfecfc6952d\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b621cfff92ba0870043bc561e624715\transformed\runtime-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\d3ea8fd4ed8c369b23b4a0c163f31fda\transformed\runtime-saveable-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\b394ad218f5b0e93e3bca51e016cc24b\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-framework-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\84b2a12287738baf9a9f7e1909c46413\transformed\sqlite-framework-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\aa895b900aaff045ee1948f50daa123c\transformed\sqlite-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a59c031b483a1487f0446cfb3a6c1ed8\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
+	package
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:4:5-25:19
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:4:5-25:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\effa1c9eaedec758367e5bfecfc6952d\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\effa1c9eaedec758367e5bfecfc6952d\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:9:13-39
+	android:label
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:8:13-37
+	android:icon
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:7:13-62
+	android:allowBackup
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:6:13-39
+	android:theme
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:10:13-50
+	android:name
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:5:13-39
+activity#com.example.fitnessapp.MainActivity
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:12:9-23:20
+	android:exported
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:14:17-40
+	android:theme
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:15:17-54
+	android:name
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:13:17-45
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:17:13-21:29
+action#android.intent.action.MAIN
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:18:17-69
+	android:name
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:18:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:20:17-77
+	android:name
+		ADDED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml:20:27-74
+uses-sdk
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\2ddf64f636b76b827ccf3d11871a4e3a\transformed\navigation-common-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\2ddf64f636b76b827ccf3d11871a4e3a\transformed\navigation-common-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\13c33ce7974f04c66b55c088a3caeef3\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\13c33ce7974f04c66b55c088a3caeef3\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b016636538a4435e0341c4f7e46e6c8\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b016636538a4435e0341c4f7e46e6c8\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\18d98fe0c3476d52926d1f075a659675\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\18d98fe0c3476d52926d1f075a659675\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\80b645d2eae934227d9a5fc5527e1b64\transformed\navigation-compose-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\80b645d2eae934227d9a5fc5527e1b64\transformed\navigation-compose-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\1e1b7326b7a6f9af17e61b2a7b4558f9\transformed\activity-1.9.3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\1e1b7326b7a6f9af17e61b2a7b4558f9\transformed\activity-1.9.3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\f4cd90ba4acde5efaefd3f8a159063ad\transformed\activity-ktx-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\f4cd90ba4acde5efaefd3f8a159063ad\transformed\activity-ktx-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6a1d9f2b0f4b8d48a60fce32399da8a\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6a1d9f2b0f4b8d48a60fce32399da8a\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\198696e8067f185b6c870ee81b5fa15c\transformed\activity-compose-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\Alexa\.gradle\caches\8.13\transforms\198696e8067f185b6c870ee81b5fa15c\transformed\activity-compose-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\c06a58836a21d2d605dc7ae5dc1103b1\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\c06a58836a21d2d605dc7ae5dc1103b1\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\9d074b19a5f9609280511c4cb690c686\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\9d074b19a5f9609280511c4cb690c686\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a11577d45235a5c1d418935b570e9a62\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a11577d45235a5c1d418935b570e9a62\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\db63f3074cf04cdcf3f77a3b51165fbf\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\db63f3074cf04cdcf3f77a3b51165fbf\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\4555dc6b882f915d85433e151dba02fb\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\4555dc6b882f915d85433e151dba02fb\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f13c1bc4fd56cbbb2fbf7b3175cf5b10\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f13c1bc4fd56cbbb2fbf7b3175cf5b10\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e9267310f51768feac050489c7042592\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e9267310f51768feac050489c7042592\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\79ff2513457d622ef435a114fb13fff3\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\79ff2513457d622ef435a114fb13fff3\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a8793698371111509565331ef3328749\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\a8793698371111509565331ef3328749\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f572e898a405f1b66e4e9b3a51f034d7\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\f572e898a405f1b66e4e9b3a51f034d7\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\0339c42f2f3d35d48c1c5a4ff3c66ced\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\0339c42f2f3d35d48c1c5a4ff3c66ced\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\aaeb394cc30a8ab3f7e5687b10c170e8\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\aaeb394cc30a8ab3f7e5687b10c170e8\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6ae2cec01e89adb7175bdd1e0d00323\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6ae2cec01e89adb7175bdd1e0d00323\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\313d8254e62b607c75a75fe65e656e8e\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\313d8254e62b607c75a75fe65e656e8e\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a562d739d4fad1fbf7c92e461bf4c24b\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a562d739d4fad1fbf7c92e461bf4c24b\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\85945d843efaaf1d3700be0096656145\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\85945d843efaaf1d3700be0096656145\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\40fcd956b6210bb5bed6ec63b67708ce\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\40fcd956b6210bb5bed6ec63b67708ce\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6cbf91c3beccebc2db9e2e616be3e34\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\a6cbf91c3beccebc2db9e2e616be3e34\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\d95a331337a33bcdd92a8537f81166ec\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\d95a331337a33bcdd92a8537f81166ec\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\25605b23880916c10e77758a4c7757b5\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\25605b23880916c10e77758a4c7757b5\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\43b9dfa4c0576ca6f9062f3841f22e1a\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\43b9dfa4c0576ca6f9062f3841f22e1a\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\97f2b1b3ff999c78a40fbb418725805d\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\97f2b1b3ff999c78a40fbb418725805d\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\694e9d1f7226d00658a3f4402ce03667\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\694e9d1f7226d00658a3f4402ce03667\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\69d247ba4fae04cd66f08ce92701f99f\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\69d247ba4fae04cd66f08ce92701f99f\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\f7da70a0240ff620ccf34aca38a82b63\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\f7da70a0240ff620ccf34aca38a82b63\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8e85f3dea0497c42faef09b64556870d\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8e85f3dea0497c42faef09b64556870d\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\101d1ff97a20d6f42503ce603a4a9e8a\transformed\core-ktx-1.15.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\101d1ff97a20d6f42503ce603a4a9e8a\transformed\core-ktx-1.15.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-ktx:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\db3613c21f86b3e6b26ebc73b96851e1\transformed\room-ktx-2.7.0-alpha01\AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\db3613c21f86b3e6b26ebc73b96851e1\transformed\room-ktx-2.7.0-alpha01\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\ab351f88113962fdb8a90b78ecb2345a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\ab351f88113962fdb8a90b78ecb2345a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ad86ccc2968dbddbdb93c9b363104ce\transformed\tracing-1.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ad86ccc2968dbddbdb93c9b363104ce\transformed\tracing-1.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\effa1c9eaedec758367e5bfecfc6952d\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\effa1c9eaedec758367e5bfecfc6952d\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b621cfff92ba0870043bc561e624715\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\7b621cfff92ba0870043bc561e624715\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\d3ea8fd4ed8c369b23b4a0c163f31fda\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\Alexa\.gradle\caches\8.13\transforms\d3ea8fd4ed8c369b23b4a0c163f31fda\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\b394ad218f5b0e93e3bca51e016cc24b\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\b394ad218f5b0e93e3bca51e016cc24b\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\84b2a12287738baf9a9f7e1909c46413\transformed\sqlite-framework-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\84b2a12287738baf9a9f7e1909c46413\transformed\sqlite-framework-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\aa895b900aaff045ee1948f50daa123c\transformed\sqlite-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-android:2.5.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\aa895b900aaff045ee1948f50daa123c\transformed\sqlite-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a59c031b483a1487f0446cfb3a6c1ed8\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\a59c031b483a1487f0446cfb3a6c1ed8\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+	android:targetSdkVersion
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\2026\IntelliJ_IDEA_Projects\FintessApp\RepTrack\app\src\main\AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\7671c8b704a77b60cb4ab8c3da32fbfe\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\e6666f73885d140c52184d6c1e7b4fe6\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Alexa\.gradle\caches\8.13\transforms\6ce35d1de5bcc4b5d97be71a75acd5e8\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
+permission#com.example.fitnessapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+uses-permission#com.example.fitnessapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.15.0] C:\Users\Alexa\.gradle\caches\8.13\transforms\8eed4c2202181183a5718a0ec1436d97\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime-android:2.7.0-alpha01] C:\Users\Alexa\.gradle\caches\8.13\transforms\de1ac9565e4132d94179b1200950e872\transformed\room-runtime-release\AndroidManifest.xml:25:13-74
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Alexa\.gradle\caches\8.13\transforms\caeabf9eb0621d27c9c48201bfcbecaa\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92

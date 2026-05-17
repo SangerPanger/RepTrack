@@ -34,6 +34,12 @@ class ProgressPredictionCalculator {
             null
         }
 
+        val calorieBalanceKcal = if (calories != null && tdee > 0) {
+            calories - tdee
+        } else {
+            null
+        }
+
         val proteinGPerKg = if (profile.averageProteinGramsPerDay != null && bodyWeight > 0) {
             profile.averageProteinGramsPerDay / bodyWeight
         } else {
@@ -71,27 +77,41 @@ class ProgressPredictionCalculator {
         }
 
         val age = profile.age ?: 30
+        
+        // Dynamic protein requirement based on calorie balance
+        // Requirement: 
+        // if 250 calorie suprlus than 1.6g protein per kg needed,
+        // if at maintain than 2.2g per kg needed,
+        // if 250 calorie deficit than 2.6g protein per kg needed,
+        val requiredProtein = when {
+            calorieBalanceKcal == null -> if (age >= 50) 1.8 else 1.6
+            calorieBalanceKcal >= 250 -> 1.6
+            calorieBalanceKcal <= -250 -> 2.6
+            calorieBalanceKcal >= 0 -> {
+                // Interpolate between 0 (2.2) and 250 (1.6)
+                2.2 - (calorieBalanceKcal / 250.0) * (2.2 - 1.6)
+            }
+            else -> {
+                // Interpolate between -250 (2.6) and 0 (2.2)
+                2.2 + (Math.abs(calorieBalanceKcal) / 250.0) * (2.6 - 2.2)
+            }
+        }
+
         val proteinMult = if (proteinGPerKg == null) {
             warnings.add("Protein intake missing; prediction confidence reduced.")
             0.90
         } else {
-            if (proteinGPerKg < 1.0) {
+            if (proteinGPerKg < requiredProtein * 0.6) {
                 warnings.add("Low protein intake; progress may be limited.")
             }
-            if (age >= 50) {
-                when {
-                    proteinGPerKg >= 1.8 -> 1.00
-                    proteinGPerKg >= 1.4 -> 0.85
-                    proteinGPerKg >= 1.0 -> 0.65
-                    else -> 0.45
-                }
-            } else {
-                when {
-                    proteinGPerKg >= 1.6 -> 1.00
-                    proteinGPerKg >= 1.2 -> 0.85
-                    proteinGPerKg >= 0.8 -> 0.65
-                    else -> 0.45
-                }
+            
+            // Adjust multiplier based on how close user is to the required protein
+            val proteinRatio = proteinGPerKg / requiredProtein
+            when {
+                proteinRatio >= 1.0 -> 1.00
+                proteinRatio >= 0.8 -> 0.85
+                proteinRatio >= 0.6 -> 0.65
+                else -> 0.45
             }
         }
 
@@ -126,7 +146,8 @@ class ProgressPredictionCalculator {
         current1RM: Double,
         previousBest1RM: Double?,
         profile: UserTrainingProfile,
-        recentWorkoutsPerWeek: Double?
+        recentWorkoutsPerWeek: Double?, weeklySets: Double? = null,
+        recent1RMHistory: List<Double> = emptyList()
     ): ProgressPredictionResult {
         val warnings = mutableListOf<String>()
         val nutritionStatus = calculateNutritionStatus(profile, warnings)
@@ -149,9 +170,11 @@ class ProgressPredictionCalculator {
         }
 
         // Adherence
-        val plannedWorkouts = profile.plannedWeeklyWorkouts ?: 3
-        val actualWorkouts = recentWorkoutsPerWeek ?: plannedWorkouts.toDouble()
-        val adherenceMultiplier = (actualWorkouts / plannedWorkouts).coerceIn(0.4, 1.1)
+        // User requirement: "utilized the avarage workout per week based on last 4 weeks"
+        // We use 3.0 as a baseline for "standard" adherence.
+        val baselineWorkouts = 3.0
+        val actualWorkouts = recentWorkoutsPerWeek ?: 1.0 // If unknown, assume low for caution
+        val adherenceMultiplier = (actualWorkouts / baselineWorkouts).coerceIn(0.4, 1.1)
         
         if (recentWorkoutsPerWeek == null) {
             // Confidence will be reduced later
@@ -159,15 +182,36 @@ class ProgressPredictionCalculator {
 
         // Age bonus
         if ((profile.age ?: 0) >= 50 && nutritionStatus.proteinMultiplier >= 1.0 && adherenceMultiplier >= 0.9) {
-            ageMultiplier = min(1.0, ageMultiplier + 0.05)
+            ageMultiplier = Math.min(1.0, ageMultiplier + 0.05)
         }
 
-        val normalStrengthGainPct4w = baseStrengthPct *
+        var normalStrengthGainPct4w = baseStrengthPct *
                 nutritionStatus.calorieStrengthMultiplier *
                 nutritionStatus.proteinMultiplier *
                 nutritionStatus.fatHormoneSupportMultiplier *
                 ageMultiplier *
                 adherenceMultiplier
+
+        // Adjust based on recent performance history
+        if (recent1RMHistory.size >= 2) {
+            val last4 = recent1RMHistory.takeLast(5) // Need up to 5 points to get 4 intervals
+            if (last4.size >= 2) {
+                val increases = mutableListOf<Double>()
+                for (i in 1 until last4.size) {
+                    val prev = last4[i-1]
+                    if (prev > 0) {
+                        increases.add((last4[i] - prev) / prev)
+                    }
+                }
+                if (increases.isNotEmpty()) {
+                    val avgRecentIncrease = increases.average()
+                    if (avgRecentIncrease > 0) {
+                        // User requirement: "divide average increase by half and add it untop of the current system"
+                        normalStrengthGainPct4w += (avgRecentIncrease / 2.0)
+                    }
+                }
+            }
+        }
 
         var predicted1RM4Weeks: Double
         if (status == TrainingStatus.RETURNING && previousBest1RM != null && previousBest1RM > current1RM) {
@@ -208,17 +252,19 @@ class ProgressPredictionCalculator {
             TrainingStatus.RETURNING -> 1.10
         }
 
-        val hypertrophyScore = trainingStatusHypertrophyMult *
+        val volumeMultiplier = if (weeklySets != null) { when { weeklySets >= 10.0 -> 1.05; weeklySets >= 7.0 -> 1.00; else -> 0.80 } } else 1.0; val hypertrophyScore = trainingStatusHypertrophyMult * volumeMultiplier *
                 nutritionStatus.calorieHypertrophyMultiplier *
                 nutritionStatus.proteinMultiplier *
                 nutritionStatus.fatHormoneSupportMultiplier *
                 ageMultiplier *
                 adherenceMultiplier
 
+                val optimizedNutritionMult = 1.10 * 1.0 * 1.0 * 1.0 * 1.0 * 1.05
+        val normalizedScore = hypertrophyScore / (trainingStatusHypertrophyMult * optimizedNutritionMult)
         val hypertrophyLabel = when {
-            hypertrophyScore < 0.50 -> PotentialLabel.LOW
-            hypertrophyScore < 0.80 -> PotentialLabel.MODERATE
-            hypertrophyScore < 1.10 -> PotentialLabel.GOOD
+            normalizedScore < 0.50 -> PotentialLabel.LOW
+            normalizedScore < 0.80 -> PotentialLabel.MODERATE
+            normalizedScore < 0.95 -> PotentialLabel.GOOD
             else -> PotentialLabel.HIGH
         }
 
@@ -237,13 +283,44 @@ class ProgressPredictionCalculator {
         }
 
         if (recentWorkoutsPerWeek == null) {
-            warnings.add("Low training history; using planned adherence.")
+            warnings.add("Low training history; using default adherence baseline.")
         }
 
-        val strengthGainPercent = if (current1RM > 0) (predicted1RM4Weeks - current1RM) / current1RM * 100 else 0.0
+        var strengthGainPercent = if (current1RM > 0) (predicted1RM4Weeks - current1RM) / current1RM * 100 else 0.0
+
+        if (profile.isReturningLifter) {
+            strengthGainPercent *= 2.0
+            // Also update the predicted 1RM if we doubled the gain percentage
+            predicted1RM4Weeks = current1RM * (1.0 + strengthGainPercent / 100.0)
+        }
 
         val roundedPredicted1RM = Math.round(predicted1RM4Weeks * 2) / 2.0
         val roundedPercent = Math.round(strengthGainPercent * 10) / 10.0
+
+        val optimizedFactors = mutableListOf<String>()
+        val missingFactors = mutableListOf<String>()
+
+        if (nutritionStatus.proteinMultiplier >= 0.95) {
+            optimizedFactors.add("Protein")
+        } else {
+            missingFactors.add("Protein")
+        }
+
+        if (nutritionStatus.calorieHypertrophyMultiplier >= 1.05) {
+            optimizedFactors.add("Calories")
+        } else {
+            missingFactors.add("Calories")
+        }
+
+        if (adherenceMultiplier >= 0.95) {
+            optimizedFactors.add("Consistency")
+        } else {
+            missingFactors.add("Consistency")
+        }
+
+        // For now, we don't have enough data for Volume and Sleep in the calculator, 
+        // so we won't add them to optimizedFactors yet to be honest.
+        if (weeklySets != null) { if (weeklySets >= 10.0) optimizedFactors.add("Volume") else if (weeklySets < 7.0) missingFactors.add("Volume") }
 
         val explanation = buildExplanation(status, nutritionStatus, hypertrophyLabel)
 
@@ -257,7 +334,9 @@ class ProgressPredictionCalculator {
             hypertrophyPotentialLabel = hypertrophyLabel,
             predictionConfidence = confidence,
             explanation = explanation,
-            warnings = warnings
+            warnings = warnings,
+            optimizedFactors = optimizedFactors,
+            missingFactors = missingFactors, isVolumeOptimized = if (weeklySets != null) weeklySets >= 10.0 else null
         )
     }
 

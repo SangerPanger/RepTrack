@@ -8,7 +8,6 @@ data class UserTrainingProfile(
     val trainingExperienceMonths: Int,
     val detrainingWeeks: Int?,
     val isReturningLifter: Boolean,
-    val plannedWeeklyWorkouts: Int?,
     val averageProteinGramsPerDay: Double?,
     val averageCaloriesPerDay: Double?,
     val estimatedTdee: Double?,
@@ -28,7 +27,9 @@ data class ProgressPredictionResult(
     val hypertrophyPotentialLabel: PotentialLabel,
     val predictionConfidence: PredictionConfidence,
     val explanation: String,
-    val warnings: List<String>
+    val warnings: List<String>,
+    val optimizedFactors: List<String> = emptyList(),
+    val missingFactors: List<String> = emptyList(), val isVolumeOptimized: Boolean? = null
 )
 
 data class NutritionStatus(

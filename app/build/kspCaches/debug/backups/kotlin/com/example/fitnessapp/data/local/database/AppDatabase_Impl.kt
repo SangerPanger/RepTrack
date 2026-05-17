@@ -72,7 +72,7 @@ public class AppDatabase_Impl : AppDatabase() {
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
     val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(7,
-        "4100d6467d21ec07b31e197f0537c961", "8f32548caec4ec0dac656d25a13fad95") {
+        "1dd0f6ef561764e1021b1d0d0876ba5a", "d5cd29f9d54366a1d94ce946f09255c3") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `workouts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `finishedAt` INTEGER, `notes` TEXT, `manualDurationMinutes` INTEGER, `durationOffsetMs` INTEGER NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `exercises` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `muscleGroup` TEXT)")
@@ -81,10 +81,10 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_exercises_exerciseId` ON `workout_exercises` (`exerciseId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `sets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutExerciseId` INTEGER NOT NULL, `setNumber` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `rpe` INTEGER, `isDrop` INTEGER NOT NULL, `completedAt` INTEGER, `completed` INTEGER NOT NULL, FOREIGN KEY(`workoutExerciseId`) REFERENCES `workout_exercises`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_sets_workoutExerciseId` ON `sets` (`workoutExerciseId`)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `user_profile` (`id` INTEGER NOT NULL, `age` INTEGER NOT NULL, `sex` TEXT NOT NULL, `heightCm` REAL NOT NULL, `bodyWeightKg` REAL NOT NULL, `trainingExperienceMonths` INTEGER NOT NULL, `detrainingWeeks` INTEGER NOT NULL, `isReturningLifter` INTEGER NOT NULL, `plannedWeeklyWorkouts` INTEGER NOT NULL, `averageProteinGramsPerDay` REAL NOT NULL, `averageCaloriesPerDay` REAL NOT NULL, `estimatedTdee` REAL NOT NULL, `fatGramsPerDay` REAL NOT NULL, `fatPercentCalories` REAL NOT NULL, `goal` TEXT NOT NULL, `useSettingsForNutrition` INTEGER NOT NULL, PRIMARY KEY(`id`))")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `user_profile` (`id` INTEGER NOT NULL, `age` INTEGER NOT NULL, `sex` TEXT NOT NULL, `heightCm` REAL NOT NULL, `bodyWeightKg` REAL NOT NULL, `trainingExperienceMonths` INTEGER NOT NULL, `detrainingWeeks` INTEGER NOT NULL, `isReturningLifter` INTEGER NOT NULL, `averageProteinGramsPerDay` REAL NOT NULL, `averageCaloriesPerDay` REAL NOT NULL, `estimatedTdee` REAL NOT NULL, `fatGramsPerDay` REAL NOT NULL, `fatPercentCalories` REAL NOT NULL, `goal` TEXT NOT NULL, `useSettingsForNutrition` INTEGER NOT NULL, PRIMARY KEY(`id`))")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `food_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `carbs` REAL NOT NULL, `fats` REAL NOT NULL, `protein` REAL NOT NULL, `calories` REAL NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4100d6467d21ec07b31e197f0537c961')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1dd0f6ef561764e1021b1d0d0876ba5a')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -253,8 +253,6 @@ public class AppDatabase_Impl : AppDatabase() {
         _columnsUserProfile.put("detrainingWeeks", TableInfo.Column("detrainingWeeks", "INTEGER",
             true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsUserProfile.put("isReturningLifter", TableInfo.Column("isReturningLifter",
-            "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
-        _columnsUserProfile.put("plannedWeeklyWorkouts", TableInfo.Column("plannedWeeklyWorkouts",
             "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsUserProfile.put("averageProteinGramsPerDay",
             TableInfo.Column("averageProteinGramsPerDay", "REAL", true, 0, null,

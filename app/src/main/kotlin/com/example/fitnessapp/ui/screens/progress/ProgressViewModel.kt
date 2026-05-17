@@ -61,10 +61,10 @@ class ProgressViewModel(
         if (workouts.isEmpty()) return@map null
         
         val now = System.currentTimeMillis()
-        val fourWeeksAgo = now - (4L * 7 * 24 * 60 * 60 * 1000)
+        val twoWeeksAgo = now - (2L * 7 * 24 * 60 * 60 * 1000)
         
         val uniqueDays = workouts
-            .filter { it.startedAt > fourWeeksAgo }
+            .filter { it.startedAt > twoWeeksAgo }
             .groupBy { 
                 val cal = Calendar.getInstance()
                 cal.timeInMillis = it.startedAt
@@ -75,7 +75,7 @@ class ProgressViewModel(
                 cal.timeInMillis
             }.size
         
-        if (uniqueDays > 0) uniqueDays.toDouble() / 4.0 else null
+        if (uniqueDays > 0) uniqueDays.toDouble() / 2.0 else null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val foodProgress: StateFlow<FoodProgress?> = combine(userProfile, foodLogs) { profile, logs ->
@@ -169,7 +169,7 @@ class ProgressViewModel(
         }
     }
 
-    private fun calculateExerciseProgress(
+    private fun calculateWeeklySets(setsWithDate: List<SetWithDate>): Double { val now = System.currentTimeMillis(); val twoWeeksAgo = now - (14L * 24 * 60 * 60 * 1000); val recentSets = setsWithDate.filter { it.startedAt > twoWeeksAgo }; return recentSets.size / 2.0; } private fun calculateExerciseProgress(
         exercise: ExerciseEntity,
         setsWithDate: List<SetWithDate>,
         profile: UserProfileEntity,
@@ -219,7 +219,8 @@ class ProgressViewModel(
             current1RM = currentMax1RM,
             previousBest1RM = previousBest1RM,
             profile = currentProfile,
-            recentWorkoutsPerWeek = adherence
+            recentWorkoutsPerWeek = adherence, weeklySets = calculateWeeklySets(setsWithDate),
+            recent1RMHistory = points.map { it.value }.takeLast(5)
         )
         
         return ExerciseProgress(

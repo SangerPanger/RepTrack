@@ -28,7 +28,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
     var trainingExperienceMonths by remember(userProfile) { mutableStateOf(userProfile?.trainingExperienceMonths?.toString() ?: "") }
     var detrainingWeeks by remember(userProfile) { mutableStateOf(userProfile?.detrainingWeeks?.toString() ?: "") }
     var isReturningLifter by remember(userProfile) { mutableStateOf(userProfile?.isReturningLifter ?: false) }
-    var plannedWeeklyWorkouts by remember(userProfile) { mutableStateOf(userProfile?.plannedWeeklyWorkouts?.toString() ?: "3") }
     
     var averageProteinGramsPerDay by remember(userProfile) { mutableStateOf(userProfile?.averageProteinGramsPerDay?.toString() ?: "") }
     var averageCaloriesPerDay by remember(userProfile) { mutableStateOf(userProfile?.averageCaloriesPerDay?.toString() ?: "") }
@@ -121,13 +120,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-
-                OutlinedTextField(
-                    value = plannedWeeklyWorkouts,
-                    onValueChange = { plannedWeeklyWorkouts = it },
-                    label = { Text("Planned Workouts per Week") },
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
 
@@ -231,7 +223,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                         trainingExperienceMonths = trainingExperienceMonths.toIntOrNull() ?: 0,
                         detrainingWeeks = detrainingWeeks.toIntOrNull() ?: 0,
                         isReturningLifter = isReturningLifter,
-                        plannedWeeklyWorkouts = plannedWeeklyWorkouts.toIntOrNull() ?: 3,
                         averageProteinGramsPerDay = averageProteinGramsPerDay.toDoubleOrNull() ?: 0.0,
                         averageCaloriesPerDay = averageCaloriesPerDay.toDoubleOrNull() ?: 0.0,
                         estimatedTdee = estimatedTdee.toDoubleOrNull() ?: 0.0,

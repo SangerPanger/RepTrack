@@ -35,7 +35,7 @@ public class UserProfileDao_Impl(
     this.__db = __db
     this.__insertAdapterOfUserProfileEntity = object : EntityInsertAdapter<UserProfileEntity>() {
       protected override fun createQuery(): String =
-          "INSERT OR REPLACE INTO `user_profile` (`id`,`age`,`sex`,`heightCm`,`bodyWeightKg`,`trainingExperienceMonths`,`detrainingWeeks`,`isReturningLifter`,`plannedWeeklyWorkouts`,`averageProteinGramsPerDay`,`averageCaloriesPerDay`,`estimatedTdee`,`fatGramsPerDay`,`fatPercentCalories`,`goal`,`useSettingsForNutrition`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+          "INSERT OR REPLACE INTO `user_profile` (`id`,`age`,`sex`,`heightCm`,`bodyWeightKg`,`trainingExperienceMonths`,`detrainingWeeks`,`isReturningLifter`,`averageProteinGramsPerDay`,`averageCaloriesPerDay`,`estimatedTdee`,`fatGramsPerDay`,`fatPercentCalories`,`goal`,`useSettingsForNutrition`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: UserProfileEntity) {
         statement.bindLong(1, entity.id.toLong())
@@ -48,16 +48,15 @@ public class UserProfileDao_Impl(
         statement.bindLong(7, entity.detrainingWeeks.toLong())
         val _tmp_1: Int = if (entity.isReturningLifter) 1 else 0
         statement.bindLong(8, _tmp_1.toLong())
-        statement.bindLong(9, entity.plannedWeeklyWorkouts.toLong())
-        statement.bindDouble(10, entity.averageProteinGramsPerDay)
-        statement.bindDouble(11, entity.averageCaloriesPerDay)
-        statement.bindDouble(12, entity.estimatedTdee)
-        statement.bindDouble(13, entity.fatGramsPerDay)
-        statement.bindDouble(14, entity.fatPercentCalories)
+        statement.bindDouble(9, entity.averageProteinGramsPerDay)
+        statement.bindDouble(10, entity.averageCaloriesPerDay)
+        statement.bindDouble(11, entity.estimatedTdee)
+        statement.bindDouble(12, entity.fatGramsPerDay)
+        statement.bindDouble(13, entity.fatPercentCalories)
         val _tmp_2: String = __converters.fromTrainingGoal(entity.goal)
-        statement.bindText(15, _tmp_2)
+        statement.bindText(14, _tmp_2)
         val _tmp_3: Int = if (entity.useSettingsForNutrition) 1 else 0
-        statement.bindLong(16, _tmp_3.toLong())
+        statement.bindLong(15, _tmp_3.toLong())
       }
     }
   }
@@ -81,8 +80,6 @@ public class UserProfileDao_Impl(
             "trainingExperienceMonths")
         val _cursorIndexOfDetrainingWeeks: Int = getColumnIndexOrThrow(_stmt, "detrainingWeeks")
         val _cursorIndexOfIsReturningLifter: Int = getColumnIndexOrThrow(_stmt, "isReturningLifter")
-        val _cursorIndexOfPlannedWeeklyWorkouts: Int = getColumnIndexOrThrow(_stmt,
-            "plannedWeeklyWorkouts")
         val _cursorIndexOfAverageProteinGramsPerDay: Int = getColumnIndexOrThrow(_stmt,
             "averageProteinGramsPerDay")
         val _cursorIndexOfAverageCaloriesPerDay: Int = getColumnIndexOrThrow(_stmt,
@@ -117,8 +114,6 @@ public class UserProfileDao_Impl(
           val _tmp_1: Int
           _tmp_1 = _stmt.getLong(_cursorIndexOfIsReturningLifter).toInt()
           _tmpIsReturningLifter = _tmp_1 != 0
-          val _tmpPlannedWeeklyWorkouts: Int
-          _tmpPlannedWeeklyWorkouts = _stmt.getLong(_cursorIndexOfPlannedWeeklyWorkouts).toInt()
           val _tmpAverageProteinGramsPerDay: Double
           _tmpAverageProteinGramsPerDay = _stmt.getDouble(_cursorIndexOfAverageProteinGramsPerDay)
           val _tmpAverageCaloriesPerDay: Double
@@ -138,7 +133,7 @@ public class UserProfileDao_Impl(
           _tmp_3 = _stmt.getLong(_cursorIndexOfUseSettingsForNutrition).toInt()
           _tmpUseSettingsForNutrition = _tmp_3 != 0
           _result =
-              UserProfileEntity(_tmpId,_tmpAge,_tmpSex,_tmpHeightCm,_tmpBodyWeightKg,_tmpTrainingExperienceMonths,_tmpDetrainingWeeks,_tmpIsReturningLifter,_tmpPlannedWeeklyWorkouts,_tmpAverageProteinGramsPerDay,_tmpAverageCaloriesPerDay,_tmpEstimatedTdee,_tmpFatGramsPerDay,_tmpFatPercentCalories,_tmpGoal,_tmpUseSettingsForNutrition)
+              UserProfileEntity(_tmpId,_tmpAge,_tmpSex,_tmpHeightCm,_tmpBodyWeightKg,_tmpTrainingExperienceMonths,_tmpDetrainingWeeks,_tmpIsReturningLifter,_tmpAverageProteinGramsPerDay,_tmpAverageCaloriesPerDay,_tmpEstimatedTdee,_tmpFatGramsPerDay,_tmpFatPercentCalories,_tmpGoal,_tmpUseSettingsForNutrition)
         } else {
           _result = null
         }
